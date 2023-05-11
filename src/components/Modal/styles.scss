@@ -1,0 +1,113 @@
+.overlay {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .modal {
+
+        width: 500px;
+        background-color: #ffffff;
+        padding: 40px;
+        border-radius: 10px;
+        box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+
+        .form-title-container {
+            display: flex;
+            justify-content: space-between;
+
+            button {
+                border: none;
+                background-color: transparent;
+                cursor: pointer;
+            }
+
+            button:active {
+                color: #ff3232;
+            }
+        }
+
+        .modal-form {
+
+            display: flex;
+            flex-direction: column;
+
+            label {
+                font-size: 12px;
+            }
+
+            input {
+                margin: 11px 0;
+                padding: 12px 16px;
+                border-radius: 12px;
+                border: 1.5px solid #e6e8ec;
+            }
+
+            .create {
+                border: 1.5px solid #6c7394;
+                color: #6c7394;
+                text-transform: uppercase;
+                margin: 0 5px;
+                padding: 5px 10px;
+                border-radius: 12px;
+                background-color: transparent;
+            }
+
+            .create:hover {
+                background-color: #838aac;
+                color: #ffffff;
+                cursor: pointer;
+            }
+
+            .create:active {
+                background-color: #6c7394;
+                color: #ffffff;
+            }
+
+            .edit {
+                border: 1.5px solid #8db591;
+                color: #8db591;
+                text-transform: uppercase;
+                margin: 0 5px;
+                padding: 5px 10px;
+                border-radius: 12px;
+                background-color: transparent;
+            }
+
+            .edit:hover {
+                background-color: #b6dfba;
+                cursor: pointer;
+            }
+
+            .edit:active {
+                color: #ffffff;
+                background-color: #8db591;
+            }
+
+            .delete {
+                border: 1.5px solid #ffafa3;
+                color: #ffafa3;
+                text-transform: uppercase;
+                margin: 0 5px;
+                padding: 5px 10px;
+                border-radius: 12px;
+                background-color: transparent;
+            }
+
+            .delete:hover {
+                background-color: #ffc9c1;
+                cursor: pointer;
+            }
+
+            .delete:active {
+                background-color: #ffafa3;
+                color: #ffffff;
+            }
+        }
+    }
+}

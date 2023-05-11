@@ -1,23 +1,36 @@
-import logo from './logo.svg';
-import './App.css';
+import ListHeader from './components/ListHeader/ListHeader'
+import ListItem from './components/Listitem/ListItem'
+import { useEffect, useState } from 'react'
 
-function App() {
+const App = () => {
+
+  const userEmail = 'alexandre.cerutti@live.com'
+  const [tasks, setTasks] = useState(null)
+
+  const getData = async () => {
+
+    try {
+
+      const response = await fetch(`http://localhost:8000/todos/${userEmail}`)
+      const data = await response.json()
+    
+      setTasks(data)
+
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  useEffect(() => {
+    getData()
+  }, [])
+
+  const sortedTasks = tasks?.sort((a,b) => new Date(a.date) - new Date (b.date))
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className='app'>
+      <ListHeader listName={'Holiday Tick List'} />
+      {sortedTasks?.map((task) => <ListItem key={task.id} task={task}/>)}
     </div>
   );
 }

@@ -2,15 +2,52 @@ import { useState } from 'react'
 
 import './styles.scss'
 
-const Modal = ({ mode, setShowModal, task }) => {
+const Modal = ({ mode, setShowModal, getData, task }) => {
 
     const editMode = mode === 'edit' ? true : false
     const [data, setData] = useState({
-        user_email: editMode ? task.user_email : null,
+        user_email: editMode ? task.user_email : 'alexandre.cerutti@live.com',
         title: editMode ? task.title : null,
         progress: editMode ? task.progress : 50,
-        date: editMode ? '' : new Date()
+        date: editMode ? task.date : new Date()
     })
+
+    const postData = async (e) => {
+        e.preventDefault()
+        try {
+            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/todos`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            })
+            if (response.status === 200) {
+                console.log('new todo created')
+                setShowModal(false)
+                getData()
+            }
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
+    const editData = async (e) => {
+        e.preventDefault()
+
+        try {
+            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/todos/${task.id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            })
+            if (response.status === 200) {
+                console.log('The todo was updated')
+                setShowModal(false)
+                getData()
+            }
+        } catch (error) {
+            console.error(error)
+        }
+    }
 
     const handleChange = (e) => {
 
@@ -19,8 +56,6 @@ const Modal = ({ mode, setShowModal, task }) => {
             ...data,
             [name]: value
         }))
-
-        console.log(data)
     }
 
     return (
@@ -54,6 +89,7 @@ const Modal = ({ mode, setShowModal, task }) => {
                     <input
                         className={mode}
                         type='submit'
+                        onClick={editMode ? editData : postData}
                     />
                 </form>
             </div>

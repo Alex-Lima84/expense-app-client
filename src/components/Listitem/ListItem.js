@@ -5,8 +5,26 @@ import ProgressBar from '../ProgressBar/ProgressBar';
 
 import './styles.scss'
 
-const ListItem = ({ task }) => {
+const ListItem = ({ task, getData }) => {
     const [showModal, setShowModal] = useState(false)
+
+    const deleteData = async (e) => {
+        e.preventDefault()
+
+        try {
+            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/todos/${task.id}`, {
+                method: 'DELETE',
+            })
+            if (response.status === 200) {
+                console.log('The todo was deleted')
+                setShowModal(false)
+                getData()
+            }
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
 
     return (
         <li className='list-item'>
@@ -18,9 +36,9 @@ const ListItem = ({ task }) => {
 
             <div className='button-container'>
                 <button className='edit' onClick={() => setShowModal(true)}>EDIT</button>
-                <button className='delete'>DELETE</button>
+                <button className='delete' onClick={deleteData}>DELETE</button>
             </div>
-            {showModal && <Modal mode={'edit'} setShowModal={setShowModal} task={task}/>}
+            {showModal && <Modal mode={'edit'} setShowModal={setShowModal} getData={getData} task={task} />}
         </li>
     );
 }

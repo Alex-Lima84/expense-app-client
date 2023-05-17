@@ -1,19 +1,22 @@
+import { useEffect, useState } from 'react'
 import ListHeader from './components/ListHeader/ListHeader'
 import ListItem from './components/Listitem/ListItem'
-import { useEffect, useState } from 'react'
+import Auth from './components/Auth/Auth'
 
 const App = () => {
 
   const userEmail = 'alexandre.cerutti@live.com'
   const [tasks, setTasks] = useState(null)
 
+  const authToken = false
+
   const getData = async () => {
 
     try {
 
-      const response = await fetch(`http://localhost:8000/todos/${userEmail}`)
+      const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/todos/${userEmail}`)
       const data = await response.json()
-    
+
       setTasks(data)
 
     } catch (error) {
@@ -22,15 +25,24 @@ const App = () => {
   }
 
   useEffect(() => {
-    getData()
+    if (authToken) {
+      getData()
+    }
   }, [])
 
-  const sortedTasks = tasks?.sort((a,b) => new Date(a.date) - new Date (b.date))
+  const sortedTasks = tasks?.sort((a, b) => new Date(a.date) - new Date(b.date))
 
   return (
     <div className='app'>
-      <ListHeader listName={'Holiday Tick List'} />
-      {sortedTasks?.map((task) => <ListItem key={task.id} task={task}/>)}
+      {!authToken &&
+        <Auth />
+      }
+      {authToken &&
+        <>
+          <ListHeader listName={'Holiday Tick List'} getData={getData} />
+          {sortedTasks?.map((task) => <ListItem key={task.id} task={task} getData={getData} />)}
+        </>
+      }
     </div>
   );
 }

@@ -5,11 +5,13 @@ import './styles.scss'
 const Auth = () => {
     const [cookies, setCookie, removeCookie] = useCookies(null)
     const [email, setEmail] = useState(null)
+    const [firstName, setFirstName] = useState(null)
+    const [lastName, setLastName] = useState(null)
     const [password, setPassword] = useState(null)
     const [confirmPassword, setConfirmPassword] = useState(null)
     const [isLogIn, setIsLogIn] = useState(true)
     const [error, setError] = useState(null)
-  
+
     const viewLogin = (status) => {
         setError(null)
         setIsLogIn(status)
@@ -18,15 +20,29 @@ const Auth = () => {
     const handleSubmit = async (e, endpoint) => {
         e.preventDefault()
 
-        if (!isLogIn && (password !== confirmPassword)) {
-            setError('Passwords are not equal')
-            return
+        if (isLogIn) {
+            if (email === null || password === null) {
+                setError('Please fill all the required info')
+                return
+            }
+        }
+
+        if (!isLogIn) {
+            if (email === null || firstName === null || lastName === null || password === null) {
+                setError('Please fill all the required info')
+                return
+            }
+
+            if (!isLogIn && (password !== confirmPassword)) {
+                setError('Passwords are not equal')
+                return
+            }
         }
 
         const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/${endpoint}`, {
             method: 'POST',
             headers: { 'Content-type': 'application/json' },
-            body: JSON.stringify({ email, password })
+            body: JSON.stringify({ email, firstName, lastName, password })
         })
 
         const data = await response.json()
@@ -54,17 +70,31 @@ const Auth = () => {
                     <h2>{isLogIn ? 'Please log in' : 'Please sign up'}</h2>
                     <input
                         type='email'
-                        placeholder='email'
+                        placeholder='Email'
                         onChange={(e) => setEmail(e.target.value)}
                     />
+                    {!isLogIn &&
+                        <>
+                            <input
+                                type='text'
+                                placeholder='First name'
+                                onChange={(e) => setFirstName(e.target.value)}
+                            />
+                            <input
+                                type='text'
+                                placeholder='Last name'
+                                onChange={(e) => setLastName(e.target.value)}
+                            />
+                        </>
+                    }
                     <input
                         type='password'
-                        placeholder='password'
+                        placeholder='Password'
                         onChange={(e) => setPassword(e.target.value)}
                     />
                     {!isLogIn &&
                         <input
-                            type='password'
+                            type='Password'
                             placeholder='confirm password'
                             onChange={(e) => setConfirmPassword(e.target.value)}
                         />

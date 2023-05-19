@@ -9,6 +9,7 @@ const App = () => {
   const userEmail = cookies.Email
   const authToken = cookies.AuthToken
   const [tasks, setTasks] = useState(null)
+  const [userName, setUserName] = useState(null)
 
   const getData = async () => {
 
@@ -20,13 +21,28 @@ const App = () => {
       setTasks(data)
 
     } catch (error) {
-      console.log(error)
+      console.error(error)
+    }
+  }
+
+  const getUserInfo = async () => {
+
+    try {
+
+      const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/users/${userEmail}`)
+      const data = await response.json()
+
+      setUserName(data[0].first_name)
+
+    } catch (error) {
+      console.error(error)
     }
   }
 
   useEffect(() => {
     if (authToken) {
       getData()
+      getUserInfo()
     }
   }, [])
 
@@ -40,7 +56,7 @@ const App = () => {
       {authToken &&
         <>
           <ListHeader listName={'Holiday Tick List'} getData={getData} />
-          <h2 className='welcome-message'>Welcome back, <strong>{userEmail}</strong></h2>
+          <h2 className='welcome-message'>Welcome back, <strong>{userName}</strong></h2>
           {sortedTasks?.map((task) => <ListItem key={task.id} task={task} getData={getData} />)}
         </>
       }

@@ -1,13 +1,50 @@
 import { useState } from 'react'
+import { useCookies } from 'react-cookie'
 import './styles.scss'
 
 const Auth = () => {
-    const [error, setError] = useState(null)
+    const [cookies, setCookie, removeCookie] = useCookies(null)
+    const [email, setEmail] = useState(null)
+    const [password, setPassword] = useState(null)
+    const [confirmPassword, setConfirmPassword] = useState(null)
     const [isLogIn, setIsLogIn] = useState(true)
-
+    const [error, setError] = useState(null)
+  
     const viewLogin = (status) => {
         setError(null)
         setIsLogIn(status)
+    }
+
+    const handleSubmit = async (e, endpoint) => {
+        e.preventDefault()
+
+        if (!isLogIn && (password !== confirmPassword)) {
+            setError('Passwords are not equal')
+            return
+        }
+
+        const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/${endpoint}`, {
+            method: 'POST',
+            headers: { 'Content-type': 'application/json' },
+            body: JSON.stringify({ email, password })
+        })
+
+        const data = await response.json()
+
+        if (data.detail) {
+            if (data.detail.includes('already exists.')) {
+                setError("This email is already taken")
+            } else {
+                setError(data.detail)
+            }
+        }
+
+        if (!data.detail) {
+            setCookie('Email', data.email)
+            setCookie('AuthToken', data.token)
+
+            window.location.reload()
+        }
     }
 
     return (
@@ -15,11 +52,29 @@ const Auth = () => {
             <div className="auth-container-box">
                 <form>
                     <h2>{isLogIn ? 'Please log in' : 'Please sign up'}</h2>
-                    <input type='email' placeholder='email' />
-                    <input type='password' placeholder='password' />
-                    {!isLogIn && <input type='password' placeholder='confirm password' />}
-                    <input type='submit' className='create' />
-                    {error && <p>{error}</p>}
+                    <input
+                        type='email'
+                        placeholder='email'
+                        onChange={(e) => setEmail(e.target.value)}
+                    />
+                    <input
+                        type='password'
+                        placeholder='password'
+                        onChange={(e) => setPassword(e.target.value)}
+                    />
+                    {!isLogIn &&
+                        <input
+                            type='password'
+                            placeholder='confirm password'
+                            onChange={(e) => setConfirmPassword(e.target.value)}
+                        />
+                    }
+                    <input
+                        type='submit'
+                        className='create'
+                        onClick={(e) => handleSubmit(e, isLogIn ? 'login' : 'signup')}
+                    />
+                    {error && <p className='error-message'>{error}</p>}
                 </form>
                 <div className='auth-options'>
                     <button

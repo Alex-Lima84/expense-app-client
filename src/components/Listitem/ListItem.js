@@ -30,8 +30,8 @@ const ListItem = ({ task, getData }) => {
         <li className='list-item'>
             <div className='info-container'>
                 <TickIcon />
-                <p>{task.title}</p>
-                <ProgressBar />
+                <p className='task-title'>{task.title}</p>
+                <ProgressBar progress={task.progress} />
             </div>
 
             <div className='button-container'>

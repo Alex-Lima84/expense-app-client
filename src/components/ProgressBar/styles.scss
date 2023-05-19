@@ -1,0 +1,11 @@
+.outer-bar {
+    width: 200px;
+    height: 14px;
+    background-color: #d8d8d8;
+    border-radius: 7px;
+    overflow: hidden;
+
+    .inner-bar {
+        height: 14px;
+    }
+}

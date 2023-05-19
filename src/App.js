@@ -2,13 +2,13 @@ import { useEffect, useState } from 'react'
 import ListHeader from './components/ListHeader/ListHeader'
 import ListItem from './components/Listitem/ListItem'
 import Auth from './components/Auth/Auth'
+import { useCookies } from 'react-cookie'
 
 const App = () => {
-
-  const userEmail = 'alexandre.cerutti@live.com'
+  const [cookies, setCookie, removeCookie] = useCookies(null)
+  const userEmail = cookies.Email
+  const authToken = cookies.AuthToken
   const [tasks, setTasks] = useState(null)
-
-  const authToken = false
 
   const getData = async () => {
 
@@ -40,6 +40,7 @@ const App = () => {
       {authToken &&
         <>
           <ListHeader listName={'Holiday Tick List'} getData={getData} />
+          <h2 className='welcome-message'>Welcome back, <strong>{userEmail}</strong></h2>
           {sortedTasks?.map((task) => <ListItem key={task.id} task={task} getData={getData} />)}
         </>
       }

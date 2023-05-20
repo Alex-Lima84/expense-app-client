@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import Modal from '../Modal/Modal'
 import { useCookies } from 'react-cookie'
+import History from '../../Services/History'
 
 import './styles.scss'
 
@@ -11,7 +12,8 @@ const ListHeader = ({ listName, getData }) => {
     const signOut = () => {
         removeCookie('Email')
         removeCookie('AuthToken')
-        window.location.reload()
+        History.push('/')               
+        window.location.reload()        
     }
 
     return (

@@ -40,11 +40,11 @@ const App = () => {
   }
 
   useEffect(() => {
-    if (authToken) {
+    
       getData()
       getUserInfo()
-    }
-  }, [])
+    
+  }, [cookies])
 
   const sortedTasks = tasks?.sort((a, b) => new Date(a.date) - new Date(b.date))
 

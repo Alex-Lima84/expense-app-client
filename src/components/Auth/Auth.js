@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useCookies } from 'react-cookie'
+import History from '../../Services/History'
 import './styles.scss'
 
 const Auth = () => {
@@ -57,9 +58,9 @@ const Auth = () => {
 
         if (!data.detail) {
             setCookie('Email', data.email)
-            setCookie('AuthToken', data.token)
-
-            window.location.reload()
+            setCookie('AuthToken', data.token)           
+            // window.location.reload()
+            History.push('/admin/home');
         }
     }
 

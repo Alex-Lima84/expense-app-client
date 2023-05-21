@@ -17,7 +17,6 @@ const Signin = () => {
     const handleSubmit = async (e) => {
         e.preventDefault()
 
-
         if (email === null || firstName === null || lastName === null || password === null || confirmPassword === null) {
             setError('Please fill all the required info')
             return
@@ -27,7 +26,6 @@ const Signin = () => {
             setError('Passwords are not equal')
             return
         }
-
 
         const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/signin`, {
             method: 'POST',

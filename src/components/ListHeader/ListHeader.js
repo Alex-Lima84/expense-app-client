@@ -6,14 +6,14 @@ import History from '../../Services/History'
 import './styles.scss'
 
 const ListHeader = ({ listName, getData }) => {
-    const [cookies, setCookie, removeCookie] = useCookies(null)
+    const [, , removeCookie] = useCookies(null)
     const [showModal, setShowModal] = useState(false)
 
     const signOut = () => {
         removeCookie('Email')
         removeCookie('AuthToken')
-        History.push('/')               
-        window.location.reload()        
+        History.push('/')
+        window.location.reload()
     }
 
     return (

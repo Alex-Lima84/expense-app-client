@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { useCookies } from 'react-cookie'
-
 import './styles.scss'
 
 const Modal = ({
@@ -9,8 +8,7 @@ const Modal = ({
     getData,
     task
 }: any) => {
-    // @ts-expect-error TS(2345): Argument of type 'null' is not assignable to param... Remove this comment to see the full error message
-    const [cookies, setCookie, removeCookie] = useCookies(null)
+    const [cookies, ,] = useCookies<any>(undefined)
     const editMode = mode === 'edit' ? true : false
     const [data, setData] = useState({
         user_email: editMode ? task.user_email : cookies.Email,
@@ -22,7 +20,6 @@ const Modal = ({
     const postData = async (e: any) => {
         e.preventDefault()
         try {
-            // @ts-expect-error TS(2580): Cannot find name 'process'. Do you need to install... Remove this comment to see the full error message
             const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/todos`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -42,7 +39,6 @@ const Modal = ({
         e.preventDefault()
 
         try {
-            // @ts-expect-error TS(2580): Cannot find name 'process'. Do you need to install... Remove this comment to see the full error message
             const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/todos/${task.id}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
@@ -68,20 +64,13 @@ const Modal = ({
     }
 
     return (
-        // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
         <div className='overlay'>
-            // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
             <div className='modal'>
-                // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
                 <div className='form-title-container'>
-                    // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
                     <h3>Let's {mode} your task</h3>
-                    // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
                     <button onClick={() => setShowModal(false)}>X</button>
                 </div>
-                // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
                 <form className='modal-form'>
-                    // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
                     <input
                         required
                         maxLength={30}
@@ -90,11 +79,8 @@ const Modal = ({
                         value={data.title}
                         onChange={handleChange}
                     />
-                    // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
                     <br />
-                    // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-                    <label for='range'>Drag to select your current progress</label>
-                    // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
+                    <label htmlFor='range'>Drag to select your current progress</label>
                     <input
                         required
                         type='range'
@@ -105,7 +91,6 @@ const Modal = ({
                         value={data.progress}
                         onChange={handleChange}
                     />
-                    // @ts-expect-error TS(17004): Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
                     <input
                         className={mode}
                         type='submit'

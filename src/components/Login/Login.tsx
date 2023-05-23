@@ -5,14 +5,13 @@ import './styles.scss'
 import { Link } from 'react-router-dom'
 
 const Login = () => {
-    const [, setCookie,] = useCookies<any>(undefined)
+    const [, setCookie,] = useCookies<string>(undefined)
     const [email, setEmail] = useState<string>('')
     const [password, setPassword] = useState<string>('')
     const [error, setError] = useState<string>('')
 
     const handleSubmit = async (e: React.FormEvent<HTMLInputElement>) => {
         e.preventDefault()
-
 
         if (email === null || password === null) {
             setError('Please fill all the required info')
@@ -36,7 +35,6 @@ const Login = () => {
         setCookie('AuthToken', data.token)
         History.push('/admin/home');
         window.location.reload()
-
     }
 
     return (

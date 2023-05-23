@@ -1,6 +1,12 @@
 import { useState } from 'react'
 import { useCookies } from 'react-cookie'
 import './styles.scss'
+interface dataType {
+    user_email: string,
+    title: string,
+    progress: number,
+    date: Date
+}
 
 const Modal = ({
     mode,
@@ -8,9 +14,9 @@ const Modal = ({
     getData,
     task
 }: any) => {
-    const [cookies, ,] = useCookies<any>(undefined)
+    const [cookies, ,] = useCookies<string>(undefined)
     const editMode = mode === 'edit' ? true : false
-    const [data, setData] = useState({
+    const [data, setData] = useState<dataType>({
         user_email: editMode ? task.user_email : cookies.Email,
         title: editMode ? task.title : null,
         progress: editMode ? task.progress : 50,

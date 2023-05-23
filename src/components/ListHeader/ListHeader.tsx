@@ -9,7 +9,7 @@ const ListHeader = ({
     listName,
     getData
 }: any) => {
-    const [, , removeCookie] = useCookies<any>(undefined)
+    const [, , removeCookie] = useCookies<string>(undefined)
     const [showModal, setShowModal] = useState(false)
 
     const signOut = () => {

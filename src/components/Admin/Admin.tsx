@@ -7,9 +7,9 @@ const Admin = () => {
     const [cookies, ,] = useCookies<any>(undefined)
     const userEmail = cookies.Email
     const [tasks, setTasks] = useState<any>(null)
-    const [userName, setUserName] = useState(null)
+    const [userName, setUserName] = useState<string>('')
 
-    const getData = async () => {
+    const getData: () => Promise<void> = async () => {
 
         try {
 

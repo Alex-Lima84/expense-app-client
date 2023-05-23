@@ -5,7 +5,7 @@ import History from '../../Services/History'
 import './styles.scss'
 
 const Signin = () => {
-    const [, setCookie,] = useCookies<any>(undefined)
+    const [, setCookie,] = useCookies<string>(undefined)
     const [email, setEmail] = useState<string>('')
     const [firstName, setFirstName] = useState<string>('')
     const [lastName, setLastName] = useState<string>('')

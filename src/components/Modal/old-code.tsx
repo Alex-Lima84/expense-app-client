@@ -1,36 +1,35 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, FormEvent } from 'react'
 import { useCookies } from 'react-cookie'
-
 import './styles.scss'
-interface emailType {
+interface dataType {
     user_email: string,
-}
-interface expenseCategoryType {
-    expense_category: string,
-    id: string
-}
-interface expenseTypesType {
-    expense_category: string,
-    expense_type: string,
-    id: string
+    title: string,
+    progress: number,
+    date: Date
 }
 
-const Modal = ({ setShowModal,
+const Modal = ({
+    mode,
+    setShowModal,
+    getData,
+    task
 }: any) => {
     const [cookies, ,] = useCookies<string>(undefined)
-    const [userEmail,] = useState<emailType>(cookies.Email)
-    const [expenseCategories, setExpenseCategories] = useState<expenseCategoryType[]>()
+    const editMode = mode === 'edit' ? true : false
+    const [data, setData] = useState<dataType>({
+        user_email: editMode ? task.user_email : cookies.Email,
+        title: editMode ? task.title : null,
+        progress: editMode ? task.progress : 50,
+        date: editMode ? task.date : new Date()
+    })
+    const [expenseCategories, setExpenseCategories] = useState<any>('')
     const [expenseCategoryName, setExpenseCategoryName] = useState<string>('')
-    const [expenseTypes, setExpenseTypes] = useState<expenseTypesType[]>()
+    const [expenseTypes, setExpenseTypes] = useState<any>('')
     const [expenseTypeName, setExpenseTypeName] = useState<string>('')
-    const [expenseAmount, setExpenseAmount] = useState<string>('')
+    const [expenseValue, setExpenseValue] = useState<number | string>(0)
     const [expenseDate, setExpenseDate] = useState<string>('')
-    const [formattedDate, setFormattedDate] = useState<string>('')
     const [expenseMonth, setExpenseMonth] = useState<string>('')
     const [expenseYear, setExpenseYear] = useState<string>('')
-    const [error, setError] = useState<string>('')
-    const [displayMessage, setDisplayMessage] = useState<string>('')
-    const moneyRegex = /\d(?=(\d{3})+,)/g;
 
     const showExpenseCategory = async () => {
         try {
@@ -45,6 +44,7 @@ const Modal = ({ setShowModal,
     }
 
     const getExpenseTypes = async (categoryId: string) => {
+
         addCategoryName(categoryId)
 
         try {
@@ -95,58 +95,26 @@ const Modal = ({ setShowModal,
     }
 
     const handleExpenseDate = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const inputDate = e.target.value
-        const date = inputDate.split('-')
-        const year = date[0]
-        const month = date[1]
-        const day = date[2]
-        const formattedDate = `${day}/${month}/${year}`
-        setExpenseDate(inputDate)
-        setFormattedDate(formattedDate)
-        setExpenseMonth(month)
-        setExpenseYear(year)
+        setExpenseDate(e.target.value)
     }
 
-    const postExpense = async (e: any) => {
-
-        e.preventDefault()
-
-        const formattedAmount = expenseAmount.replace(',', '.').replace(moneyRegex, '$&.')
-
-        if (expenseTypeName === '' || formattedAmount === '' || expenseCategoryName === '' || expenseDate === '') {
-            setError('Por favor, preencha todas as informações.')
-            return
-        } else {
-            setError('')
-        }
-
-        setDisplayMessage('Salvando dados...')
-        try {
-
-            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/expense`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    expenseTypeName,
-                    expenseAmount: formattedAmount,
-                    expenseCategoryName,
-                    expenseDate: formattedDate,
-                    expenseYear,
-                    expenseMonth,
-                    userEmail
-                })
-            })
-            if (response.status === 200) {
-                setShowModal(false)
-                setDisplayMessage('')
-                // getData()
-            }
-
-        } catch (error) {
-            console.error(error)
-            setError('Ocorreu um erro, tente novamente.')
-        }
-    }
+    // const postData = async (e: any) => {
+    //     e.preventDefault()
+    //     try {
+    //         const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/todos`, {
+    //             method: 'POST',
+    //             headers: { 'Content-Type': 'application/json' },
+    //             body: JSON.stringify(data)
+    //         })
+    //         if (response.status === 200) {
+    //             console.log('new todo created')
+    //             setShowModal(false)
+    //             getData()
+    //         }
+    //     } catch (error) {
+    //         console.error(error)
+    //     }
+    // }
 
     // const editData = async (e: any) => {
     //     e.preventDefault()
@@ -180,16 +148,18 @@ const Modal = ({ setShowModal,
         showExpenseCategory()
     }, [])
 
+    console.log(expenseDate)  
+
     return (
         <div className='overlay'>
             <div className='modal'>
                 <div className='form-title-container'>
-                    <h3>Preencha as informações abaixo para cadastrar uma despesa</h3>
+                    <h3>Let's {mode} your task</h3>
                     <button onClick={() => setShowModal(false)}>X</button>
                 </div>
                 <form className='modal-form'>
-                    <div className='choice-container'>
-                        <label>Escolha a categoria da despesa:</label>
+                    <div className='category-choice'>
+                        <label>Escolha a categoria da despesa</label>
                         <select
                             onChange={(e: React.ChangeEvent<HTMLSelectElement>) => { getExpenseTypes(e.target.value) }}
                         >
@@ -204,8 +174,8 @@ const Modal = ({ setShowModal,
                             )) : ''}
                         </select >
                     </div>
-                    <div className='choice-container'>
-                        <label>Escolha o tipo de despesa:</label>
+                    <div className='type-choice'>
+                        <label>Escolha o tipo de despesa</label>
                         <select
                             onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setExpenseTypeName(e.target.value)}
                         >
@@ -220,29 +190,25 @@ const Modal = ({ setShowModal,
                             )) : ''}
                         </select >
                     </div>
-                    <div className='choice-container'>
-                        <label>Informe o valor da despesa:</label>
-                        <input                       
-                            value={expenseAmount}
-                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => { setExpenseAmount(e.target.value) }}
+                    <div>
+                        <label>Informe o valor da despesa</label>
+                        <input
+                            value={expenseValue}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => { setExpenseValue(e.target.value) }}
                         />
                     </div>
-                    <div className='choice-container'>
-                        <label>Informe a data da despesa:</label>
-                        <input                            
-                            type="date"
+                    <div className='dates-info'>
+                        <label>Informe a data da despesa</label>
+                        <input type="date"
                             min="1997-01-01" max="2030-12-31" value={expenseDate}
                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleExpenseDate(e)}
                         />
                     </div>
-                    {error !== '' ? <p className='error-message'>{error}</p> : ''}
                     <input
-                        className='create'
+                        className={mode}
                         type='submit'
-                        value='Enviar'
-                        onClick={postExpense}
+                    // onClick={editMode ? editData : postData}
                     />
-                    {displayMessage !== '' ? <p className='display-message'>{displayMessage}</p> : ''}
                 </form>
             </div>
         </div>

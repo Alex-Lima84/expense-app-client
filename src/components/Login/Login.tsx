@@ -1,8 +1,9 @@
 import { useState } from 'react'
 import { useCookies } from 'react-cookie'
 import History from '../../Services/History'
-import './styles.scss'
 import { Link } from 'react-router-dom'
+import InputMask from 'react-input-mask'
+import './styles.scss'
 
 const Login = () => {
     const [, setCookie,] = useCookies<string>(undefined)

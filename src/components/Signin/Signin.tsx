@@ -45,8 +45,8 @@ const Signin = () => {
             }
         }
 
-        setCookie('Email', data.email)
-        setCookie('AuthToken', data.token)
+        setCookie('Email', data.email, { path: '/admin/home' })
+        setCookie('AuthToken', data.token, { path: '/admin/home' })
         History.push('/admin/home');
         window.location.reload()
 

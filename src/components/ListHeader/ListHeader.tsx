@@ -7,16 +7,18 @@ import './styles.scss'
 
 const ListHeader = ({
     listName,
-    getData
+    getData,
+
 }: any) => {
-    const [, , removeCookie] = useCookies<string>(undefined)
+    const [, , removeCookie] = useCookies();
     const [showModal, setShowModal] = useState(false)
 
     const signOut = () => {
-        removeCookie('Email')
-        removeCookie('AuthToken')
         History.push('/')
         window.location.reload()
+        removeCookie('Email')
+        removeCookie('AuthToken')
+        localStorage.removeItem('@Expense:token');
     }
 
     return (

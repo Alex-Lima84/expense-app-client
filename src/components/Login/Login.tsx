@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { useCookies } from 'react-cookie'
 import History from '../../Services/History'
 import { Link } from 'react-router-dom'
-import InputMask from 'react-input-mask'
 import './styles.scss'
 
 const Login = () => {
@@ -10,6 +9,8 @@ const Login = () => {
     const [email, setEmail] = useState<string>('')
     const [password, setPassword] = useState<string>('')
     const [error, setError] = useState<string>('')
+    const [confirmAccess, setConfirmAccess] = useState<boolean>(false)
+
 
     const handleSubmit = async (e: React.FormEvent<HTMLInputElement>) => {
         e.preventDefault()
@@ -32,8 +33,9 @@ const Login = () => {
             return
         }
 
-        setCookie('Email', data.email)
-        setCookie('AuthToken', data.token)
+        setCookie('Email', data.email, { path: '/admin/home' })
+        setCookie('AuthToken', data.token, { path: '/admin/home' })
+        localStorage.setItem('@Expense:token', JSON.stringify(data.token));
         History.push('/admin/home');
         window.location.reload()
     }

@@ -3,8 +3,14 @@ import Login from '../components/Login/Login'
 import Signin from '../components/Signin/Signin'
 import Admin from '../components/Admin/Admin'
 import Home from '../components/Home/Home'
+import History from '../Services/History'
 
 const AppRoutes = () => {
+    const storagedToken = localStorage.getItem('@Expense:token');
+
+    if (!storagedToken) {
+        History.push('/')
+    }
 
     return (
         <BrowserRouter>

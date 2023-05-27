@@ -1,4 +1,3 @@
-import React from 'react';
 import AppRoutes from './Routes/Routes'
 
 const App = () => {
@@ -6,7 +5,6 @@ const App = () => {
   return (
 
     <div className='app'>
-
       <AppRoutes />
     </div>
   );

@@ -1,17 +1,10 @@
-import { useState } from 'react'
-import Modal from '../Modal/Modal'
 import { useCookies } from 'react-cookie'
 import History from '../../Services/History'
 
 import './styles.scss'
 
-const ListHeader = ({
-    listName,
-    getData,
-
-}: any) => {
+const ListHeader = () => {
     const [, , removeCookie] = useCookies();
-    const [showModal, setShowModal] = useState(false)
 
     const signOut = () => {
         History.push('/')
@@ -23,12 +16,10 @@ const ListHeader = ({
 
     return (
         <div className='list-header'>
-            <h1>{listName}</h1>
+            <h1>Despesas Pessoais</h1>
             <div className='button-container'>
-                <button className='create' onClick={() => setShowModal(true)}> Adicionar</button>
                 <button className='signout' onClick={signOut}>Sair</button>
             </div>
-            {showModal && <Modal mode={'create'} setShowModal={setShowModal} getData={getData} />}
         </div>
     );
 }

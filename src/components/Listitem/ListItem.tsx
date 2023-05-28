@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import Modal from '../Modal/Modal';
+import Modal from '../ExpenseModal/Modal';
 import TickIcon from '../TickIcon/TickIcon'
 import ProgressBar from '../ProgressBar/ProgressBar';
 

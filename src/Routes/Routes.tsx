@@ -4,6 +4,8 @@ import Signin from '../components/Signin/Signin'
 import Admin from '../components/Admin/Admin'
 import Home from '../components/Home/Home'
 import History from '../Services/History'
+import ModifyExpense from '../components/ModifyExpense/ModifyExpense'
+import ModifyIncome from '../components/ModifyIncome/ModifyIncome'
 
 const AppRoutes = () => {
     const storagedToken = localStorage.getItem('@Expense:token');
@@ -16,9 +18,11 @@ const AppRoutes = () => {
         <BrowserRouter>
             <Routes>
                 <Route path='/' element={<Home />} />
-                <Route path='/admin/home' element={<Admin />} />
                 <Route path='/signin' element={<Signin />} />
                 <Route path='/login' element={<Login />} />
+                <Route path='/admin/home' element={<Admin />} />
+                <Route path='/admin/modify-expense' element={<ModifyExpense />} />
+                <Route path='/admin/modify-income' element={<ModifyIncome />} />
             </Routes>
         </BrowserRouter>
     )

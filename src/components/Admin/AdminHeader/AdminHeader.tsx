@@ -1,9 +1,9 @@
 import { useCookies } from 'react-cookie'
-import History from '../../Services/History'
+import History from '../../../Services/History'
 
 import './styles.scss'
 
-const ListHeader = () => {
+const AdminHeader = () => {
     const [, , removeCookie] = useCookies();
 
     const signOut = () => {
@@ -15,7 +15,7 @@ const ListHeader = () => {
     }
 
     return (
-        <div className='list-header'>
+        <div className='admin-header'>
             <h1>Despesas Pessoais</h1>
             <div className='button-container'>
                 <button className='signout' onClick={signOut}>Sair</button>
@@ -24,4 +24,4 @@ const ListHeader = () => {
     );
 }
 
-export default ListHeader;
+export default AdminHeader;

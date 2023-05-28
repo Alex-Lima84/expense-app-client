@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useCookies } from 'react-cookie'
-import ListHeader from '../ListHeader/ListHeader'
-import ExpenseModal from '../ExpenseModal/Modal'
+import AdminHeader from '../AdminHeader/AdminHeader'
+import ExpenseEntry from '../ExpenseEntry/ExpenseEntry'
 import { Link } from 'react-router-dom'
 
 const Admin = () => {
@@ -30,15 +30,16 @@ const Admin = () => {
 
     return (
         <>
-            <ListHeader />
+            <AdminHeader />
             <h2 className='welcome-message'>Bem-vindo de volta, <strong>{userName}</strong></h2>
             <div className='options-container'>
-                <button className='create' onClick={() => setExpenseShowModal(true)}> Adicionar despesa</button>
+                {/* <button className='create' onClick={() => setExpenseShowModal(true)}> Adicionar despesa</button> */}
+                <Link to='/admin/expense-entry'>Adicionar despesa</Link>
                 <Link to='/admin/modify-expense'>Modificar despesa</Link>               
                 <button className='create' onClick={() => ('')}> Adicionar receita</button>
                 <Link to='/admin/modify-income'>Modificar receita</Link>      
             </div>
-            {showExpenseModal && <ExpenseModal setShowModal={setExpenseShowModal} />}
+            {showExpenseModal && <ExpenseEntry setShowModal={setExpenseShowModal} />}
         </>
     );
 }

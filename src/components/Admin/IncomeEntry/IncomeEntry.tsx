@@ -15,7 +15,7 @@ interface expenseTypesType {
     id: string
 }
 
-const Modal = ({ setShowModal,
+const IncomeEntry = ({ setShowModal,
 }: any) => {
     const [cookies, ,] = useCookies<string>(undefined)
     const [userEmail,] = useState<emailType>(cookies.Email)
@@ -249,4 +249,4 @@ const Modal = ({ setShowModal,
     );
 }
 
-export default Modal;
+export default IncomeEntry;

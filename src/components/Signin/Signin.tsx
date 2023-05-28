@@ -45,9 +45,10 @@ const Signin = () => {
             }
         }
 
-        setCookie('Email', data.email, { path: '/admin/home' })
-        setCookie('AuthToken', data.token, { path: '/admin/home' })
-        History.push('/admin/home');
+        // setCookie('Email', data.email, { path: '/admin/home' })
+        // setCookie('AuthToken', data.token, { path: '/admin/home' })
+        localStorage.setItem('@First-signin', JSON.stringify(data.email));
+        History.push('/login');
         window.location.reload()
 
     }

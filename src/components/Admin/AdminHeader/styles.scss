@@ -1,0 +1,30 @@
+.admin-header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+
+    .button-container {
+        display: flex;
+        align-items: center;
+
+        button {
+            margin: 0 5px;
+            padding: 5px 10px;
+            border-radius: 12px;
+            background-color: transparent;
+            min-width: 100px;
+        }
+
+        .signout {
+            border: 1.5px solid #838aac;
+            background-color: #fff;
+            color: #838aac;
+        }
+
+        .signout:hover {
+            background-color: #838aac;
+            color: #ffffff;
+            cursor: pointer;
+        }
+    }
+}

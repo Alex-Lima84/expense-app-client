@@ -33,6 +33,12 @@ const Login = () => {
             return
         }
 
+        const firstSigninToken = localStorage.getItem('@First-signin');
+
+        if (firstSigninToken) {
+            localStorage.removeItem('@First-signin');
+        }
+
         setCookie('Email', data.email, { path: '/admin/home' })
         setCookie('AuthToken', data.token, { path: '/admin/home' })
         localStorage.setItem('@Expense:token', JSON.stringify(data.token));

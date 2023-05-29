@@ -1,0 +1,23 @@
+.welcome-message {
+    color: #000;
+    font-size: 16px;
+    font-weight: 300;
+}
+
+.options-container {
+    margin: 40px 0;
+
+    a {
+        margin: 10px;
+        padding: 5px 10px;
+        text-decoration: none;
+        border: 1px solid #7c7c7c;
+        color: #000;
+        border-radius: 5px;
+    }
+
+    a:hover {
+        background-color: #7c7c7c;
+        color: #fff;
+    }       
+}

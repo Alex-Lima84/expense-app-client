@@ -1,13 +1,12 @@
-import { Link } from "react-router-dom"
 import './styles.scss'
-import Admin from "../Home/Home"
+import AdminHome from "../Home/AdminHome"
 
 const ModifyExpense = () => {
 
     return (
         <div className="modify-expense-container">
-            <Admin />
-            <h2>Abaixo estão listadas as últimas 10 despesas lançadas:</h2>
+            <AdminHome />
+            <h2>Abaixo estão listadas as 10 últimas despesas lançadas:</h2>
         </div>
     )
 }

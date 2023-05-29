@@ -3,8 +3,9 @@ import { useCookies } from 'react-cookie'
 import AdminHeader from '../AdminHeader/AdminHeader'
 import ExpenseEntry from '../ExpenseEntry/ExpenseEntry'
 import { Link } from 'react-router-dom'
+import './styles.scss'
 
-const Admin = () => {
+const AdminHome = () => {
     const [cookies, ,] = useCookies<any>(undefined)
     const userEmail = cookies.Email
     const [userName, setUserName] = useState<string>('')
@@ -35,13 +36,15 @@ const Admin = () => {
             <div className='options-container'>
                 {/* <button className='create' onClick={() => setExpenseShowModal(true)}> Adicionar despesa</button> */}
                 <Link to='/admin/expense-entry'>Adicionar despesa</Link>
-                <Link to='/admin/modify-expense'>Modificar despesa</Link>               
-                <button className='create' onClick={() => ('')}> Adicionar receita</button>
-                <Link to='/admin/modify-income'>Modificar receita</Link>      
+                <Link to='/admin/modify-expense'>Modificar despesa</Link>
+                <Link to='/admin/income-entry'>Adicionar receita</Link>
+                <Link to='/admin/modify-income'>Modificar receita</Link>
+                <Link to='/admin/expense-view'>Visualizar despesas</Link>
+                <Link to='/admin/income-view'>Visualizar receitas</Link>
             </div>
             {showExpenseModal && <ExpenseEntry setShowModal={setExpenseShowModal} />}
         </>
     );
 }
 
-export default Admin;
+export default AdminHome;

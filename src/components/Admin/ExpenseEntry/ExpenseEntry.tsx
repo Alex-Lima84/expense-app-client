@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useCookies } from 'react-cookie'
-
+import AdminHome from '../Home/AdminHome'
 import './styles.scss'
-import Admin from '../Home/Home'
 interface emailType {
     user_email: string,
 }
@@ -124,7 +123,7 @@ const ExpenseEntry = ({ setShowModal,
         setDisplayMessage('Salvando dados...')
         try {
 
-            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/expense`, {
+            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/expense-entry`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -138,7 +137,6 @@ const ExpenseEntry = ({ setShowModal,
                 })
             })
             if (response.status === 200) {
-                setShowModal(false)
                 setDisplayMessage('')
                 // getData()
             }
@@ -183,7 +181,7 @@ const ExpenseEntry = ({ setShowModal,
 
     return (
         <>
-            <Admin />
+            <AdminHome />
             <div className='expense-form-title-container'>
                 <h3>Preencha as informações abaixo para cadastrar uma despesa</h3>
             </div>

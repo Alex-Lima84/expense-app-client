@@ -1,6 +1,5 @@
 import { useCookies } from 'react-cookie'
 import History from '../../../Services/History'
-
 import './styles.scss'
 
 const AdminHeader = () => {
@@ -16,7 +15,6 @@ const AdminHeader = () => {
 
     return (
         <div className='admin-header'>
-            <h1>Despesas Pessoais</h1>
             <div className='button-container'>
                 <button className='signout' onClick={signOut}>Sair</button>
             </div>

@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react'
 import { useCookies } from 'react-cookie'
-import AdminHome from '../Home/AdminHome'
 import './styles.scss'
+import AdminHeader from '../AdminHeader/AdminHeader'
+import AdminNavigationHeader from '../AdminNavigationHeader/AdminNavigationHeader'
 interface emailType {
     user_email: string,
 }
@@ -181,70 +182,76 @@ const ExpenseEntry = ({ setShowModal,
 
     return (
         <>
-            <AdminHome />
-            <div className='expense-form-title-container'>
-                <h3>Preencha as informações abaixo para cadastrar uma despesa</h3>
-            </div>
-            <form className='expense-form'>
-                <div className='choice-container'>
-                    <label>Escolha a categoria da despesa:</label>
-                    <select
-                        onChange={(e: React.ChangeEvent<HTMLSelectElement>) => { getExpenseTypes(e.target.value) }}
-                    >
-                        <option value="">Selecione...</option>
-                        {expenseCategories ? expenseCategories.map((option: any) => (
-                            <option
-                                key={option.id}
-                                value={option.id}
+            <AdminHeader />
+            <div className='expense-entry-container'>
+                <AdminNavigationHeader />
+                {/* <div className='expense-form-title-container'>
+                    <h3>Preencha as informações abaixo para cadastrar uma despesa</h3>
+                </div> */}
+                <div className='expense-form-container'>
+                    <form className='expense-form'>
+                        <h2>Adicionar despesa</h2>
+                        <div className='choice-container'>
+                            <label>Escolha a categoria da despesa:</label>
+                            <select
+                                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => { getExpenseTypes(e.target.value) }}
                             >
-                                {option.expense_category}
-                            </option>
-                        )) : ''}
-                    </select >
-                </div>
-                <div className='choice-container'>
-                    <label>Escolha o tipo de despesa:</label>
-                    <select
-                        onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setExpenseTypeName(e.target.value)}
-                    >
-                        <option value="">Selecione...</option>
-                        {expenseTypes ? expenseTypes.map((option: any) => (
-                            <option
-                                key={option.id}
-                                value={option.expense_type}
+                                <option value="">Selecione...</option>
+                                {expenseCategories ? expenseCategories.map((option: any) => (
+                                    <option
+                                        key={option.id}
+                                        value={option.id}
+                                    >
+                                        {option.expense_category}
+                                    </option>
+                                )) : ''}
+                            </select >
+                        </div>
+                        <div className='choice-container'>
+                            <label>Escolha o tipo de despesa:</label>
+                            <select
+                                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setExpenseTypeName(e.target.value)}
                             >
-                                {option.expense_type}
-                            </option>
-                        )) : ''}
-                    </select >
-                </div>
-                <div className='choice-container'>
-                    <label>Informe o valor da despesa:</label>
-                    <input
-                        value={expenseAmount}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => { setExpenseAmount(e.target.value) }}
-                    />
-                </div>
-                <div className='choice-container'>
-                    <label>Informe a data da despesa:</label>
-                    <input
-                        type="date"
-                        min="1997-01-01" max="2030-12-31" value={expenseDate}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleExpenseDate(e)}
-                    />
-                </div>
-                {error !== '' ? <p className='error-message'>{error}</p> : ''}
-                <div className='submit-button-container'>
-                    <input
-                        className='submit-expense'
-                        type='submit'
-                        value='Enviar'
-                        onClick={postExpense}
-                    />
-                </div>
+                                <option value="">Selecione...</option>
+                                {expenseTypes ? expenseTypes.map((option: any) => (
+                                    <option
+                                        key={option.id}
+                                        value={option.expense_type}
+                                    >
+                                        {option.expense_type}
+                                    </option>
+                                )) : ''}
+                            </select >
+                        </div>
+                        <div className='choice-container'>
+                            <label>Informe o valor da despesa:</label>
+                            <input
+                                value={expenseAmount}
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => { setExpenseAmount(e.target.value) }}
+                            />
+                        </div>
+                        <div className='choice-container'>
+                            <label>Informe a data da despesa:</label>
+                            <input
+                                type="date"
+                                min="1997-01-01" max="2030-12-31" value={expenseDate}
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleExpenseDate(e)}
+                            />
+                        </div>
+                        {error !== '' ? <p className='error-message'>{error}</p> : ''}
+                        <div className='submit-button-container'>
+                            <input
+                                className='submit-expense'
+                                type='submit'
+                                value='Enviar'
+                                onClick={postExpense}
+                            />
+                        </div>
 
-                {displayMessage !== '' ? <p className='display-message'>{displayMessage}</p> : ''}
-            </form>
+                        {displayMessage !== '' ? <p className='display-message'>{displayMessage}</p> : ''}
+                    </form>
+                </div>
+            </div>
         </>
     );
 }

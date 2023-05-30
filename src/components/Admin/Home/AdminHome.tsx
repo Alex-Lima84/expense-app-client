@@ -1,15 +1,13 @@
 import { useEffect, useState } from 'react'
 import { useCookies } from 'react-cookie'
 import AdminHeader from '../AdminHeader/AdminHeader'
-import ExpenseEntry from '../ExpenseEntry/ExpenseEntry'
-import { Link } from 'react-router-dom'
+import AdminNavigationHeader from '../AdminNavigationHeader/AdminNavigationHeader'
 import './styles.scss'
 
 const AdminHome = () => {
     const [cookies, ,] = useCookies<any>(undefined)
     const userEmail = cookies.Email
     const [userName, setUserName] = useState<string>('')
-    const [showExpenseModal, setExpenseShowModal] = useState(false)
 
     const getUserInfo = async () => {
 
@@ -32,17 +30,10 @@ const AdminHome = () => {
     return (
         <>
             <AdminHeader />
-            <h2 className='welcome-message'>Bem-vindo de volta, <strong>{userName}</strong></h2>
-            <div className='options-container'>
-                {/* <button className='create' onClick={() => setExpenseShowModal(true)}> Adicionar despesa</button> */}
-                <Link to='/admin/expense-entry'>Adicionar despesa</Link>
-                <Link to='/admin/modify-expense'>Modificar despesa</Link>
-                <Link to='/admin/income-entry'>Adicionar receita</Link>
-                <Link to='/admin/modify-income'>Modificar receita</Link>
-                <Link to='/admin/expense-view'>Visualizar despesas</Link>
-                <Link to='/admin/income-view'>Visualizar receitas</Link>
+            <div className='admin-home-container'>
+                <AdminNavigationHeader />
+                <h2 className='welcome-message'>Bem-vindo, <strong>{userName}</strong></h2>
             </div>
-            {showExpenseModal && <ExpenseEntry setShowModal={setExpenseShowModal} />}
         </>
     );
 }

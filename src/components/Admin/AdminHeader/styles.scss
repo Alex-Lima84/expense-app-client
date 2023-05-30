@@ -1,14 +1,15 @@
 .admin-header {
-    width: 100%;
+    width: 100vw;
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;  
 
     .button-container {
         display: flex;
         align-items: center;
 
         button {
-            margin: 0 5px;
+            margin-top: 20px;
+            margin-right: 20px;
             padding: 5px 10px;
             border-radius: 12px;
             background-color: transparent;

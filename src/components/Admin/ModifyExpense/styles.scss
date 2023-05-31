@@ -1,0 +1,51 @@
+.modify-expense-container {
+    display: flex;
+    width: 100vw;
+
+    .expenses-list-container {
+        display: flex;
+        flex-direction: column;
+        width: 100vw;
+        justify-content: center;
+        align-items: center;
+        margin-top: 20px;
+
+        h2 {
+            font-size: 20px;
+        }
+
+        thead {
+            margin-bottom: 20px;
+
+            tr {
+                th {
+                    width: 100px;
+                    font-size: 16px;
+                }
+            }
+        }
+
+        .expenses-list {
+            border-bottom: 1px solid;
+            margin: 5px 0;
+
+            td {
+                width: 100px;
+                text-align: center;
+                height: 40px;
+                font-size: 14px;
+            }
+
+            .edit-button {
+                cursor: pointer;
+            }
+
+            .delete-button {
+                cursor: pointer;
+            }
+        }
+
+
+
+    }
+}

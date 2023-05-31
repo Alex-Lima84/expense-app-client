@@ -3,6 +3,8 @@ import { useCookies } from 'react-cookie'
 
 import './styles.scss'
 import AdminHome from '../Home/AdminHome'
+import AdminHeader from '../AdminHeader/AdminHeader'
+import AdminNavigationHeader from '../AdminNavigationHeader/AdminNavigationHeader'
 interface emailType {
     user_email: string,
 }
@@ -104,54 +106,56 @@ const IncomeEntry = ({ setShowModal,
 
     return (
         <>
-            <AdminHome />
-            <div className='expense-form-title-container'>
-                <h3>Preencha as informações abaixo para cadastrar uma receita</h3>
-            </div>
-            <form className='expense-form'>
-                <div className='choice-container'>
-                    <label>Escolha o tipo de receita:</label>
-                    <select
-                        onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setIncomeTypeName(e.target.value)}
-                    >
-                        <option value="">Selecione...</option>
-                        {incomeTypes ? incomeTypes.map((option: any) => (
-                            <option
-                                key={option.id}
-                                value={option.income_type}
+            <AdminHeader />
+            <div className='income-entry-container'>
+                <AdminNavigationHeader />
+                <div className='income-form-container'>
+                    <form className='income-form'>
+                        <h2>Adicionar receita</h2>
+                        <div className='choice-container'>
+                            <label>Escolha o tipo de receita:</label>
+                            <select
+                                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setIncomeTypeName(e.target.value)}
                             >
-                                {option.income_type}
-                            </option>
-                        )) : ''}
-                    </select >
+                                <option value="">Selecione...</option>
+                                {incomeTypes ? incomeTypes.map((option: any) => (
+                                    <option
+                                        key={option.id}
+                                        value={option.income_type}
+                                    >
+                                        {option.income_type}
+                                    </option>
+                                )) : ''}
+                            </select >
+                        </div>
+                        <div className='choice-container'>
+                            <label>Informe o valor da receita:</label>
+                            <input
+                                value={incomeAmount}
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => { setIncomeAmount(e.target.value) }}
+                            />
+                        </div>
+                        <div className='choice-container'>
+                            <label>Informe a data da receita:</label>
+                            <input
+                                type="date"
+                                min="1997-01-01" max="2030-12-31" value={incomeDate}
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleIncomeDate(e)}
+                            />
+                        </div>
+                        {error !== '' ? <p className='error-message'>{error}</p> : ''}
+                        <div className='submit-button-container'>
+                            <input
+                                className='submit-expense'
+                                type='submit'
+                                value='Enviar'
+                                onClick={postIncome}
+                            />
+                        </div>
+                        {displayMessage !== '' ? <p className='display-message'>{displayMessage}</p> : ''}
+                    </form>
                 </div>
-                <div className='choice-container'>
-                    <label>Informe o valor da receita:</label>
-                    <input
-                        value={incomeAmount}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => { setIncomeAmount(e.target.value) }}
-                    />
-                </div>
-                <div className='choice-container'>
-                    <label>Informe a data da receita:</label>
-                    <input
-                        type="date"
-                        min="1997-01-01" max="2030-12-31" value={incomeDate}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleIncomeDate(e)}
-                    />
-                </div>
-                {error !== '' ? <p className='error-message'>{error}</p> : ''}
-                <div className='submit-button-container'>
-                    <input
-                        className='submit-expense'
-                        type='submit'
-                        value='Enviar'
-                        onClick={postIncome}
-                    />
-                </div>
-
-                {displayMessage !== '' ? <p className='display-message'>{displayMessage}</p> : ''}
-            </form>
+            </div>
         </>
     );
 }

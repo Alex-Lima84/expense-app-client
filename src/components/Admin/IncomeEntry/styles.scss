@@ -1,52 +1,23 @@
-.overlay {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(0, 0, 0, 0.5);
+.income-entry-container {
     display: flex;
-    justify-content: center;
-    align-items: center;
+    width: 100vw;
 
-    .modal {
+    .income-form-container {
+        display: flex;
+        width: 100vw;
+        justify-content: center;
+        align-items: center;
 
-        width: 500px;
-        background-color: #ffffff;
-        padding: 40px;
-        border-radius: 10px;
-        box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-
-        .form-title-container {
-            display: flex;
-            justify-content: space-between;
-
-            h3 {
-                text-align: center;
-                border: 1.5px solid #e6e8ec;
-                border-radius: 10px;
-                padding: 10px 5px;
-            }
-
-            button {
-                border: none;
-                background-color: transparent;
-                cursor: pointer;
-                padding: 0;
-                margin-right: -10px;
-                margin-left: 10px;
-                margin-top: -20px;
-                height: 30px;
-            }
-
-            button:active {
-                color: #ff3232;
-            }
-        }
-
-        .modal-form {
+        .income-form {
             display: flex;
             flex-direction: column;
+            margin-top: 20px;
+
+            h2 {
+                text-align: center;
+                margin-bottom: 0;
+                font-size: 20px
+            }
 
             .choice-container {
                 display: flex;
@@ -59,12 +30,12 @@
                 }
 
                 select {
-                    max-width: 150px;
+                    width: 305px;
                 }
 
                 input {
-                    padding: 5px 16px;
-                    max-width: 250px;
+                    padding: 5px 0 5px 5px;
+                    width: 300px;
                     border-radius: 12px;
                     border: 1.5px solid #e6e8ec;
                 }
@@ -76,52 +47,26 @@
                 text-align: center;
             }
 
-            .create {
-                border: 1.5px solid #6c7394;
-                color: #6c7394;
-                text-transform: uppercase;
-                margin: 20px 5px 0px 5px;
-                padding: 5px 10px;
-                border-radius: 12px;
-                background-color: transparent;
-            }
+            .submit-button-container {
+                display: flex;
+                justify-content: center;
 
-            .create:hover {
-                background-color: #838aac;
-                color: #ffffff;
-                cursor: pointer;
-            }
+                .submit-expense {
+                    border: 1.5px solid #6c7394;
+                    width: 150px;
+                    color: #6c7394;
+                    text-transform: uppercase;
+                    margin: 20px 5px 0px 5px;
+                    padding: 5px 10px;
+                    border-radius: 12px;
+                    background-color: transparent;
+                    cursor: pointer;
+                }
 
-            .create:active {
-                background-color: #6c7394;
-                color: #ffffff;
-            }
-
-            .delete {
-                border: 1.5px solid #ffafa3;
-                color: #ffafa3;
-                text-transform: uppercase;
-                margin: 0 5px;
-                padding: 5px 10px;
-                border-radius: 12px;
-                background-color: transparent;
-            }
-
-            .delete:hover {
-                background-color: #ffc9c1;
-                cursor: pointer;
-            }
-
-            .delete:active {
-                background-color: #ffafa3;
-                color: #ffffff;
-            }
-
-            .display-message {
-                color: #000fe7;
-                font-size: 12px;
-                text-align: center;
-                margin-bottom: 0;
+                .submit-expense:hover {
+                    background-color: #6c7394;
+                    color: #fff;
+                }
             }
         }
     }

@@ -184,10 +184,7 @@ const ExpenseEntry = ({ setShowModal,
         <>
             <AdminHeader />
             <div className='expense-entry-container'>
-                <AdminNavigationHeader />
-                {/* <div className='expense-form-title-container'>
-                    <h3>Preencha as informações abaixo para cadastrar uma despesa</h3>
-                </div> */}
+                <AdminNavigationHeader />                
                 <div className='expense-form-container'>
                     <form className='expense-form'>
                         <h2>Adicionar despesa</h2>
@@ -247,7 +244,6 @@ const ExpenseEntry = ({ setShowModal,
                                 onClick={postExpense}
                             />
                         </div>
-
                         {displayMessage !== '' ? <p className='display-message'>{displayMessage}</p> : ''}
                     </form>
                 </div>

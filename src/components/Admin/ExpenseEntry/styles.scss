@@ -1,33 +1,6 @@
 .expense-entry-container {
     display: flex;
-    width: 100vw;
-
-    .expense-form-title-container {
-        display: flex;
-        justify-content: center;
-
-        h3 {
-            text-align: center;
-            border: 1.5px solid #e6e8ec;
-            border-radius: 10px;
-            padding: 10px 5px;
-        }
-
-        button {
-            border: none;
-            background-color: transparent;
-            cursor: pointer;
-            padding: 0;
-            margin-right: -10px;
-            margin-left: 10px;
-            margin-top: -20px;
-            height: 30px;
-        }
-
-        button:active {
-            color: #ff3232;
-        }
-    }
+    width: 100vw;    
 
     .expense-form-container {
         display: flex;
@@ -43,6 +16,7 @@
             h2 {
                 text-align: center;
                 margin-bottom: 0;
+                font-size: 20px
             }
 
             .choice-container {

@@ -1,14 +1,12 @@
 import { useEffect, useState } from 'react'
 import { useCookies } from 'react-cookie'
-import AdminHeader from '../AdminHeader/AdminHeader'
-import ExpenseEntry from '../ExpenseEntry/ExpenseEntry'
 import { Link } from 'react-router-dom'
 import './styles.scss'
 
 const AdminNavigationHeader = () => {
     const [cookies, ,] = useCookies<any>(undefined)
     const userEmail = cookies.Email
-    const [userName, setUserName] = useState<string>('')
+    const [, setUserName] = useState<string>('')
 
     const getUserInfo = async () => {
 

@@ -6,8 +6,8 @@ import './styles.scss'
 
 const Login = () => {
     const [, setCookie,] = useCookies<string>(undefined)
-    const [email, setEmail] = useState<string>('')
-    const [password, setPassword] = useState<string>('')
+    const [email, setEmail] = useState<string>('alexandre.cerutti@live.com')
+    const [password, setPassword] = useState<string>('123')
     const [error, setError] = useState<string>('')
     const [confirmAccess, setConfirmAccess] = useState<boolean>(false)
 

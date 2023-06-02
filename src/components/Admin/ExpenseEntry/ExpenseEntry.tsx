@@ -3,26 +3,25 @@ import { useCookies } from 'react-cookie'
 import './styles.scss'
 import AdminHeader from '../AdminHeader/AdminHeader'
 import AdminNavigationHeader from '../AdminNavigationHeader/AdminNavigationHeader'
-interface emailType {
+interface emailInterface {
     user_email: string,
 }
-interface expenseCategoryType {
+interface expenseCategoryInterface {
     expense_category: string,
     id: string
 }
-interface expenseTypesType {
+interface expenseTypesInterface {
     expense_category: string,
     expense_type: string,
     id: string
 }
 
-const ExpenseEntry = ({ setShowModal,
-}: any) => {
+const ExpenseEntry = () => {
     const [cookies, ,] = useCookies<string>(undefined)
-    const [userEmail,] = useState<emailType>(cookies.Email)
-    const [expenseCategories, setExpenseCategories] = useState<expenseCategoryType[]>()
+    const [userEmail,] = useState<emailInterface>(cookies.Email)
+    const [expenseCategories, setExpenseCategories] = useState<expenseCategoryInterface[]>()
     const [expenseCategoryName, setExpenseCategoryName] = useState<string>('')
-    const [expenseTypes, setExpenseTypes] = useState<expenseTypesType[]>()
+    const [expenseTypes, setExpenseTypes] = useState<expenseTypesInterface[]>()
     const [expenseTypeName, setExpenseTypeName] = useState<string>('')
     const [expenseAmount, setExpenseAmount] = useState<string>('')
     const [expenseDate, setExpenseDate] = useState<string>('')
@@ -184,7 +183,7 @@ const ExpenseEntry = ({ setShowModal,
         <>
             <AdminHeader />
             <div className='expense-entry-container'>
-                <AdminNavigationHeader />                
+                <AdminNavigationHeader />
                 <div className='expense-form-container'>
                     <form className='expense-form'>
                         <h2>Adicionar despesa</h2>

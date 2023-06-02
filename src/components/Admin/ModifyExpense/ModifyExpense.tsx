@@ -4,7 +4,7 @@ import AdminNavigationHeader from '../AdminNavigationHeader/AdminNavigationHeade
 import { useEffect, useState } from 'react';
 import { useCookies } from 'react-cookie';
 
-interface showExpensesType {
+interface showExpensesInterface {
     map(arg0: (option: any) => import("react/jsx-runtime").JSX.Element): import("react").ReactNode;
     expense_type: string,
     expense_amount: string,
@@ -18,9 +18,52 @@ interface showExpensesType {
     updated_at: string
 }
 
+interface expenseInterface {
+    expense_type: string,
+    expense_amount: string,
+    expense_category: string,
+    expense_year: string,
+    expense_month: string,
+    id: string,
+    updated_at: string
+}
+
+type expenseType = expenseInterface[]
+
+interface expenseCategoryType {
+    expense_category: string,
+    id: string
+}
+interface expenseTypesInterface {
+    expense_category: string,
+    expense_type: string,
+    id: string
+}
+
 const ModifyExpense = () => {
+    const [expenseData, setExpenseData] = useState<expenseType>([{
+        expense_type: '',
+        expense_amount: '',
+        expense_category: '',
+        expense_year: '',
+        expense_month: '',
+        id: '',
+        updated_at: ''
+    }])
     const [cookies, ,] = useCookies<any>(undefined)
-    const [showExpenses, setShowExpenses] = useState<showExpensesType>()
+    const [showExpenses, setShowExpenses] = useState<showExpensesInterface>()
+    const [showModal, setShowModal] = useState<boolean>(false)
+    const [expenseTypes, setExpenseTypes] = useState<expenseTypesInterface[]>()
+    const [expenseCategories, setExpenseCategories] = useState<expenseCategoryType[]>()
+    const [expenseCategoryName, setExpenseCategoryName] = useState<string>('')
+    const [expenseTypeName, setExpenseTypeName] = useState<string>('')
+    const [expenseAmount, setExpenseAmount] = useState<string>('')
+    const [expenseDate, setExpenseDate] = useState<string>('')
+    const [formattedDate, setFormattedDate] = useState<string>('')
+    const [expenseMonth, setExpenseMonth] = useState<string>('')
+    const [expenseYear, setExpenseYear] = useState<string>('')
+    const [error, setError] = useState<string>('')
+    const [displayMessage, setDisplayMessage] = useState<string>('')
     const userEmail = cookies.Email
     const regexMoney = /\d(?=(\d{3})+,)/g;
 
@@ -39,6 +82,111 @@ const ModifyExpense = () => {
     useEffect(() => {
         getExpenses()
     }, [])
+
+    const getExpenseInfo = async (expenseId: string) => {
+
+        try {
+            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/expense/${userEmail}/${expenseId}`)
+            const data = await response.json()
+            setExpenseData(data)
+            console.log(expenseData)
+            setShowModal(true)
+            showExpenseCategory()
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const showOrHideModal = () => {
+
+        if (!showModal) {
+            setShowModal(true)
+            document.body.classList.add('no-scroll');
+            window.scrollTo(0, 0);
+        }
+
+        if (showModal) {
+            setShowModal(false)
+            document.body.classList.remove('no-scroll');
+        }
+    };
+
+    const showExpenseCategory = async () => {
+        try {
+
+            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/expense-categories`)
+            const data = await response.json()
+            setExpenseCategories(data)
+
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
+    const getExpenseTypes = async (categoryId: string) => {
+        addCategoryName(categoryId)
+
+        try {
+
+            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/expense-types/${categoryId}`)
+            const data = await response.json()
+            setExpenseTypes(data)
+
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
+    const addCategoryName = (categoryId: string) => {
+        setExpenseCategoryName('')
+        setExpenseTypeName('')
+
+        switch (categoryId) {
+            case '581921fe-c8e9-4989-9a52-b6c5e5f368b4': {
+                setExpenseCategoryName('Habitação');
+                break;
+            }
+            case '18b03713-2dec-4ca2-9eea-7f5766289e4f': {
+                setExpenseCategoryName('Saúde');
+                break;
+            }
+            case '61a3ed30-224b-4945-9687-c22cb578e15f': {
+                setExpenseCategoryName('Transporte');
+                break;
+            }
+            case '4eb2deb6-7706-455f-a62f-b505b19a2fc3': {
+                setExpenseCategoryName('Automóvel');
+                break;
+            }
+            case 'd85451bd-b2d1-4ad2-bbde-50e62ce96218': {
+                setExpenseCategoryName('Despesas pessoais');
+                break;
+            }
+            case '50218ddf-dbdc-4483-a0ba-5c1f1f06c1ce': {
+                setExpenseCategoryName('Lazer');
+                break;
+            }
+            case '52f51e00-f5a3-4a83-b44a-e81bfd63f64d': {
+                setExpenseCategoryName('Educação');
+                break;
+            }
+        }
+    }
+
+    const handleExpenseDate = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const inputDate = e.target.value
+        const date = inputDate.split('-')
+        const year = date[0]
+        const month = date[1]
+        const day = date[2]
+        const formattedDate = `${day}/${month}/${year}`
+        setExpenseDate(inputDate)
+        setFormattedDate(formattedDate)
+        setExpenseMonth(month)
+        setExpenseYear(year)
+    }
+
+    console.log(expenseData[0])
 
     return (
         <>
@@ -69,7 +217,7 @@ const ModifyExpense = () => {
                                 .replace(regexMoney, '$&.')}</td>
                             <td>{expense.expense_year}</td>
                             <td>{expense.expense_month}</td>
-                            <td className='edit-button'>
+                            <td onClick={() => getExpenseInfo(expense.id)} className='edit-button'>
                                 <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 576 512">
                                     <path d="M402.6 83.2l90.2 90.2c3.8 3.8 3.8 10 0 13.8L274.4 405.6l-92.8 10.3c-12.4 1.4-22.9-9.1-21.5-21.5l10.3-92.8L388.8 83.2c3.8-3.8 10-3.8 13.8 0zm162-22.9l-48.8-48.8c-15.2-15.2-39.9-15.2-55.2 0l-35.4 35.4c-3.8 3.8-3.8 10 0 13.8l90.2 90.2c3.8 3.8 10 3.8 13.8 0l35.4-35.4c15.2-15.3 15.2-40 0-55.2zM384 346.2V448H64V128h229.8c3.2 0 6.2-1.3 8.5-3.5l40-40c7.6-7.6 2.2-20.5-8.5-20.5H48C21.5 64 0 85.5 0 112v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V306.2c0-10.7-12.9-16-20.5-8.5l-40 40c-2.2 2.3-3.5 5.3-3.5 8.5z" />
                                 </svg>
@@ -83,6 +231,82 @@ const ModifyExpense = () => {
                     )) : ''}
                 </div>
             </div>
+            {showModal &&
+                <div id="expense-edit">
+                    <div className="expense-edit-modal-container">
+                        <div className="close-button-container">
+                            <button onClick={showOrHideModal}>
+                                <p>X</p>
+                            </button>
+                        </div>
+                        <div className='expense-form-container'>
+                            <form className='expense-form'>
+                                <h2>Adicionar despesa</h2>
+                                <div className='choice-container'>
+                                    <h2>Categoria atual: {expenseData[0].expense_category}</h2>
+                                    <label>Escolha a categoria da despesa:</label>
+                                    <select
+                                        onChange={(e: React.ChangeEvent<HTMLSelectElement>) => { getExpenseTypes(e.target.value) }}
+                                    >
+                                        <option value="">Selecione...</option>
+                                        {expenseCategories ? expenseCategories.map((option: any) => (
+                                            <option
+                                                key={option.id}
+                                                value={option.id}
+                                            >
+                                                {option.expense_category}
+                                            </option>
+                                        )) : ''}
+                                    </select >
+                                </div>
+                                <div className='choice-container'>
+                                    <h2>Tipo de despesa atual: {expenseData[0].expense_type}</h2>
+                                    <label>Escolha o tipo de despesa:</label>
+                                    <select
+                                        onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setExpenseTypeName(e.target.value)}
+                                    >
+                                        <option value="">Selecione...</option>
+                                        {expenseTypes ? expenseTypes.map((option: any) => (
+                                            <option
+                                                key={option.id}
+                                                value={option.expense_type}
+                                            >
+                                                {option.expense_type}
+                                            </option>
+                                        )) : ''}
+                                    </select >
+                                </div>
+                                <div className='choice-container'>
+                                    <h2>Valor da despesa atual: R$ {expenseData[0].expense_amount}</h2>
+                                    <label>Informe o valor da despesa:</label>
+                                    <input
+                                        value={expenseAmount}
+                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => { setExpenseAmount(e.target.value) }}
+                                    />
+                                </div>
+                                <div className='choice-container'>
+                                    <h2>Data da despesa atual: {expenseData[0].updated_at}</h2>
+                                    <label>Informe a data da despesa:</label>
+                                    <input
+                                        type="date"
+                                        min="1997-01-01" max="2030-12-31" value={expenseDate}
+                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleExpenseDate(e)}
+                                    />
+                                </div>
+                                {error !== '' ? <p className='error-message'>{error}</p> : ''}
+                                <div className='submit-button-container'>
+                                    <input
+                                        className='submit-expense'
+                                        type='submit'
+                                        value='Enviar'
+                                    // onClick={}
+                                    />
+                                </div>
+                                {displayMessage !== '' ? <p className='display-message'>{displayMessage}</p> : ''}
+                            </form>
+                        </div>
+                    </div>
+                </div>}
         </>
     );
 

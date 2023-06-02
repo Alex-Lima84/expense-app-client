@@ -44,8 +44,39 @@
                 cursor: pointer;
             }
         }
-
-
-
     }
 }
+
+.hide {
+    display: none !important;
+  }
+
+  .no-scroll {
+    overflow: hidden;
+  }
+
+  #expense-edit {
+    position: absolute !important;    
+    top: 0;
+    left: 0;
+    right: 0%;
+    margin: 0 auto;
+    width: 100vw;
+    height: 100vh;
+    z-index: 9999;
+    display: flex;
+    background-color: #070707bd;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;  
+  }
+
+  .expense-edit-modal-container {
+    display: flex;
+    flex-direction: column;
+    width: 500px;
+    height: 600px;
+    background-color: #ffffff;        
+    margin: 0 auto;
+    border-radius: 0.5rem;
+  }

@@ -8,11 +8,7 @@ import AdminNavigationHeader from '../AdminNavigationHeader/AdminNavigationHeade
 interface emailType {
     user_email: string,
 }
-interface expenseCategoryType {
-    expense_category: string,
-    id: string
-}
-interface expenseTypesType {
+interface incomeTypesInterface {
     expense_category: string,
     expense_type: string,
     id: string
@@ -22,7 +18,7 @@ const IncomeEntry = ({ setShowModal,
 }: any) => {
     const [cookies, ,] = useCookies<string>(undefined)
     const [userEmail,] = useState<emailType>(cookies.Email)
-    const [incomeTypes, setIncomeTypes] = useState<expenseTypesType[]>()
+    const [incomeTypes, setIncomeTypes] = useState<incomeTypesInterface[]>()
     const [incomeTypeName, setIncomeTypeName] = useState<string>('')
     const [incomeAmount, setIncomeAmount] = useState<string>('')
     const [incomeDate, setIncomeDate] = useState<string>('')

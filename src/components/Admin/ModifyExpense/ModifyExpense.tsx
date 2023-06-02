@@ -84,14 +84,17 @@ const ModifyExpense = () => {
     }, [])
 
     const getExpenseInfo = async (expenseId: string) => {
+        showExpenseCategory()
 
         try {
             const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/expense/${userEmail}/${expenseId}`)
             const data = await response.json()
             setExpenseData(data)
-            console.log(expenseData)
+            setExpenseAmount(data[0].expense_amount)
+            setExpenseDate(data[0].expense_date)
+            setExpenseCategoryName(data[0].expense_category)
+            console.log(expenseCategoryName)
             setShowModal(true)
-            showExpenseCategory()
         } catch (error) {
             console.log(error)
         }
@@ -186,7 +189,7 @@ const ModifyExpense = () => {
         setExpenseYear(year)
     }
 
-    console.log(expenseData[0])
+    console.log(expenseCategoryName)
 
     return (
         <>
@@ -260,7 +263,6 @@ const ModifyExpense = () => {
                                     </select >
                                 </div>
                                 <div className='choice-container'>
-                                    <h2>Tipo de despesa atual: {expenseData[0].expense_type}</h2>
                                     <label>Escolha o tipo de despesa:</label>
                                     <select
                                         onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setExpenseTypeName(e.target.value)}
@@ -277,7 +279,6 @@ const ModifyExpense = () => {
                                     </select >
                                 </div>
                                 <div className='choice-container'>
-                                    <h2>Valor da despesa atual: R$ {expenseData[0].expense_amount}</h2>
                                     <label>Informe o valor da despesa:</label>
                                     <input
                                         value={expenseAmount}
@@ -285,7 +286,6 @@ const ModifyExpense = () => {
                                     />
                                 </div>
                                 <div className='choice-container'>
-                                    <h2>Data da despesa atual: {expenseData[0].updated_at}</h2>
                                     <label>Informe a data da despesa:</label>
                                     <input
                                         type="date"

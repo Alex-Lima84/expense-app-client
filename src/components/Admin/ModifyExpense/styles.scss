@@ -14,26 +14,33 @@
             font-size: 20px;
         }
 
-        thead {
-            margin-bottom: 20px;
+        thead {        
+            margin: 5px 0 20px 0;
+            border: 1px solid;
+            border-radius: 5px;
+            padding: 15px;                   
 
             tr {
                 th {
                     width: 100px;
-                    font-size: 16px;
+                    font-size: 16px;                    
                 }
             }
         }
 
-        .expenses-list {
-            border-bottom: 1px solid;
+        .expenses-list {            
             margin: 5px 0;
+            border: 1px solid;
+            border-radius: 5px;
+            padding: 10px;
 
             td {
                 width: 100px;
                 text-align: center;
                 height: 40px;
                 font-size: 14px;
+                vertical-align: middle;
+
             }
 
             .edit-button {
@@ -49,14 +56,14 @@
 
 .hide {
     display: none !important;
-  }
+}
 
-  .no-scroll {
+.no-scroll {
     overflow: hidden;
-  }
+}
 
-  #expense-edit {
-    position: absolute !important;    
+#expense-edit {
+    position: absolute !important;
     top: 0;
     left: 0;
     right: 0%;
@@ -68,15 +75,101 @@
     background-color: #070707bd;
     flex-direction: column;
     justify-content: center;
-    text-align: center;  
-  }
+    text-align: center;
+}
 
-  .expense-edit-modal-container {
+.expense-edit-modal-container {
     display: flex;
     flex-direction: column;
     width: 500px;
     height: 600px;
-    background-color: #ffffff;        
+    background-color: #ffffff;
     margin: 0 auto;
     border-radius: 0.5rem;
-  }
+
+    .close-button-container {
+        display: flex;
+        justify-content: flex-end;
+
+        button {
+            margin: 5px;
+            background-color: #fff;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background-color: #bdbdbd;
+            color: #fff;
+        }
+    }
+
+    .expense-form {
+        display: flex;
+        flex-direction: column;
+        margin-top: 20px;
+
+        h2 {
+            text-align: center;
+            margin-bottom: 0;
+            font-size: 18px
+        }
+
+        .choice-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 10px;
+
+            h3 {
+                font-size: 14px;
+                font-weight: 300;
+            }
+
+            label {
+                font-size: 12px;
+                margin: 10px 0;
+            }
+
+            select {
+                width: 305px;
+            }
+
+            input {
+                padding: 5px 0 5px 5px;
+                width: 300px;
+                border-radius: 12px;
+                border: 1.5px solid #e6e8ec;
+            }
+        }
+
+        .error-message {
+            color: #ff0000;
+            font-size: 12px;
+            text-align: center;
+        }
+
+        .submit-button-container {
+            display: flex;
+            justify-content: center;
+
+            .submit-expense {
+                border: 1.5px solid #6c7394;
+                width: 150px;
+                color: #6c7394;
+                text-transform: uppercase;
+                margin: 20px 5px 0px 5px;
+                padding: 5px 10px;
+                border-radius: 12px;
+                background-color: transparent;
+                cursor: pointer;
+            }
+
+            .submit-expense:hover {
+                background-color: #6c7394;
+                color: #fff;
+            }
+        }
+    }
+}

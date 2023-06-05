@@ -7,13 +7,18 @@ import './styles.scss'
 const AdminHome = () => {
     const [cookies, ,] = useCookies<any>(undefined)
     const userEmail = cookies.Email
+    const authToken = cookies.AuthToken 
     const [userName, setUserName] = useState<string>('')
 
     const getUserInfo = async () => {
 
         try {
 
-            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/users/${userEmail}`)
+            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/users/${userEmail}`, {
+                headers: {
+                    Authorization: authToken,
+                }
+            })
             const data = await response.json()
 
             setUserName(data[0].first_name)

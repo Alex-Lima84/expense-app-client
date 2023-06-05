@@ -22,6 +22,7 @@ interface expenseInterface {
     expense_type: string,
     expense_amount: string,
     expense_category: string,
+    expense_date: string,
     expense_year: string,
     expense_month: string,
     id: string,
@@ -45,6 +46,7 @@ const ModifyExpense = () => {
         expense_type: '',
         expense_amount: '',
         expense_category: '',
+        expense_date: '',
         expense_year: '',
         expense_month: '',
         id: '',
@@ -66,12 +68,18 @@ const ModifyExpense = () => {
     const [error, setError] = useState<string>('')
     const [displayMessage, setDisplayMessage] = useState<string>('')
     const userEmail = cookies.Email
+    const authToken = cookies.AuthToken
     const moneyRegex = /\d(?=(\d{3})+,)/g;
 
     const getExpenses = async () => {
         try {
 
-            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/expenses/${userEmail}`)
+            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/expenses/${userEmail}`, {
+                headers: {
+                    Authorization: authToken,
+                }
+            })
+
             const data = await response.json()
             setShowExpenses(data)
 
@@ -93,10 +101,11 @@ const ModifyExpense = () => {
             setExpenseData(data)
             setId(expenseId)
             setExpenseAmount(data[0].expense_amount)
-            const dateYear = data[0].updated_at.substring(0, 4)
-            const dateMonth = data[0].updated_at.substring(5, 7)
-            const dateDay = data[0].updated_at.substring(8, 10)
+            const dateYear = data[0].expense_date.substring(0, 4)
+            const dateMonth = data[0].expense_date.substring(5, 7)
+            const dateDay = data[0].expense_date.substring(8, 10)
             const expenseDate = `${dateYear}-${dateMonth}-${dateDay}`
+            console.log(expenseDate)
             setExpenseDate(expenseDate)
             setShowModal(true)
         } catch (error) {
@@ -196,6 +205,16 @@ const ModifyExpense = () => {
         e.preventDefault()
         const formattedAmount = expenseAmount.replace(',', '.').replace(moneyRegex, '$&.')
 
+        if (expenseTypeName === '' || formattedAmount === '' || expenseCategoryName === '' || expenseDate === '') {
+            setError('Por favor, preencha todas as informações.')
+            return
+        }
+
+        // if (expenseTypeName === expenseData[0].expense_type && expenseAmount === expenseData[0].expense_amount && expenseCategoryName === expenseData[0].expense_category && expenseDate === expenseData[0].expense_date) {
+        //     setError('Não houve modificação de pelo menos um campo.')
+        //     return
+        // }
+
         try {
             const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/expense/${userEmail}/${id}`, {
                 method: 'PUT',
@@ -204,7 +223,7 @@ const ModifyExpense = () => {
                     expenseTypeName,
                     expenseAmount: formattedAmount,
                     expenseCategoryName,
-                    expenseDate: formattedDate,
+                    expenseDate,
                     expenseYear,
                     expenseMonth,
                     userEmail,
@@ -214,6 +233,7 @@ const ModifyExpense = () => {
             if (response.status === 200) {
                 setShowModal(false)
                 getExpenses()
+                setError('')
             }
         } catch (error) {
             console.error(error)
@@ -232,13 +252,13 @@ const ModifyExpense = () => {
                             <th>Tipo</th>
                             <th>Categoria</th>
                             <th>Valor</th>
-                            <th>Data</th>                           
+                            <th>Data</th>
                             <th>Editar</th>
                             <th>Deletar</th>
                         </tr>
                     </thead>
                     {showExpenses ? showExpenses.map((expense: any) => (
-                        
+
                         <tr className='expenses-list'
                             key={expense.id}
                         >
@@ -246,8 +266,8 @@ const ModifyExpense = () => {
                             <td>{expense.expense_category}</td>
                             <td>R${' '} {expense.expense_amount
                                 .replace('.', ',')
-                                .replace(moneyRegex, '$&.')}</td>                               
-                            <td>{expense.updated_at}</td>                            
+                                .replace(moneyRegex, '$&.')}</td>
+                            <td>{expense.expense_date}</td>
                             <td onClick={() => getExpenseInfo(expense.id)} className='edit-button'>
                                 <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 576 512">
                                     <path d="M402.6 83.2l90.2 90.2c3.8 3.8 3.8 10 0 13.8L274.4 405.6l-92.8 10.3c-12.4 1.4-22.9-9.1-21.5-21.5l10.3-92.8L388.8 83.2c3.8-3.8 10-3.8 13.8 0zm162-22.9l-48.8-48.8c-15.2-15.2-39.9-15.2-55.2 0l-35.4 35.4c-3.8 3.8-3.8 10 0 13.8l90.2 90.2c3.8 3.8 10 3.8 13.8 0l35.4-35.4c15.2-15.3 15.2-40 0-55.2zM384 346.2V448H64V128h229.8c3.2 0 6.2-1.3 8.5-3.5l40-40c7.6-7.6 2.2-20.5-8.5-20.5H48C21.5 64 0 85.5 0 112v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V306.2c0-10.7-12.9-16-20.5-8.5l-40 40c-2.2 2.3-3.5 5.3-3.5 8.5z" />
@@ -311,7 +331,7 @@ const ModifyExpense = () => {
                                     <label>Informe o valor da despesa:</label>
                                     <input
                                         value={expenseAmount.replace('.', ',')
-                                        .replace(moneyRegex, '$&.')}
+                                            .replace(moneyRegex, '$&.')}
                                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => { setExpenseAmount(e.target.value) }}
                                     />
                                 </div>

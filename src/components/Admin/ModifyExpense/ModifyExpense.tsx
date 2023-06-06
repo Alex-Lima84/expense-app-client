@@ -3,6 +3,7 @@ import AdminHeader from '../AdminHeader/AdminHeader';
 import AdminNavigationHeader from '../AdminNavigationHeader/AdminNavigationHeader';
 import { useEffect, useState } from 'react';
 import { useCookies } from 'react-cookie';
+import { toast } from 'react-toastify';
 
 interface showExpensesInterface {
     map(arg0: (option: any) => import("react/jsx-runtime").JSX.Element): import("react").ReactNode;
@@ -62,11 +63,10 @@ const ModifyExpense = () => {
     const [expenseTypeName, setExpenseTypeName] = useState<string>('')
     const [expenseAmount, setExpenseAmount] = useState<string>('')
     const [expenseDate, setExpenseDate] = useState<string>('')
-    const [formattedDate, setFormattedDate] = useState<string>('')
+    // const [formattedDate, setFormattedDate] = useState<string>('')
     const [expenseMonth, setExpenseMonth] = useState<string>('')
     const [expenseYear, setExpenseYear] = useState<string>('')
     const [error, setError] = useState<string>('')
-    const [displayMessage, setDisplayMessage] = useState<string>('')
     const userEmail = cookies.Email
     const authToken = cookies.AuthToken
     const moneyRegex = /\d(?=(\d{3})+,)/g;
@@ -96,7 +96,11 @@ const ModifyExpense = () => {
         showExpenseCategory()
 
         try {
-            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/expense/${userEmail}/${expenseId}`)
+            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/expense/${userEmail}/${expenseId}`, {
+                headers: {
+                    Authorization: authToken,
+                }
+            })
             const data = await response.json()
             setExpenseData(data)
             setId(expenseId)
@@ -127,9 +131,13 @@ const ModifyExpense = () => {
     };
 
     const showExpenseCategory = async () => {
-        try {
 
-            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/expense-categories`)
+        try {
+            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/expense-categories`, {
+                headers: {
+                    Authorization: authToken,
+                }
+            })
             const data = await response.json()
             setExpenseCategories(data)
 
@@ -142,8 +150,11 @@ const ModifyExpense = () => {
         addCategoryName(categoryId)
 
         try {
-
-            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/expense-types/${categoryId}`)
+            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/expense-types/${categoryId}`, {
+                headers: {
+                    Authorization: authToken,
+                }
+            })
             const data = await response.json()
             setExpenseTypes(data)
 
@@ -193,10 +204,10 @@ const ModifyExpense = () => {
         const date = inputDate.split('-')
         const year = date[0]
         const month = date[1]
-        const day = date[2]
-        const formattedDate = `${day}/${month}/${year}`
+        // const day = date[2]
+        // const formattedDate = `${day}/${month}/${year}`
         setExpenseDate(inputDate)
-        setFormattedDate(formattedDate)
+        // setFormattedDate(formattedDate)
         setExpenseMonth(month)
         setExpenseYear(year)
     }
@@ -204,16 +215,20 @@ const ModifyExpense = () => {
     const updateExpense = async (e: any) => {
         e.preventDefault()
         const formattedAmount = expenseAmount.replace(',', '.').replace(moneyRegex, '$&.')
+        const expenseDataDate = expenseData[0].expense_date.slice(0, 10)
 
         if (expenseTypeName === '' || formattedAmount === '' || expenseCategoryName === '' || expenseDate === '') {
             setError('Por favor, preencha todas as informações.')
             return
         }
 
-        // if (expenseTypeName === expenseData[0].expense_type && expenseAmount === expenseData[0].expense_amount && expenseCategoryName === expenseData[0].expense_category && expenseDate === expenseData[0].expense_date) {
-        //     setError('Não houve modificação de pelo menos um campo.')
-        //     return
-        // }
+        if (expenseTypeName === expenseData[0].expense_type &&
+            expenseAmount === expenseData[0].expense_amount &&
+            expenseCategoryName === expenseData[0].expense_category &&
+            expenseDate === expenseDataDate) {
+            setError('Não houve modificação em pelo menos um campo.')
+            return
+        }
 
         try {
             const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/expense/${userEmail}/${id}`, {
@@ -231,6 +246,7 @@ const ModifyExpense = () => {
                 })
             })
             if (response.status === 200) {
+                toast.success("Despesa modificada! 😎");
                 setShowModal(false)
                 getExpenses()
                 setError('')
@@ -352,7 +368,6 @@ const ModifyExpense = () => {
                                         onClick={updateExpense}
                                     />
                                 </div>
-                                {displayMessage !== '' ? <p className='display-message'>{displayMessage}</p> : ''}
                             </form>
                         </div>
                     </div>

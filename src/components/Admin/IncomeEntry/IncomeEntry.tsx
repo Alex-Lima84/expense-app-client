@@ -5,12 +5,12 @@ import './styles.scss'
 import AdminHome from '../Home/AdminHome'
 import AdminHeader from '../AdminHeader/AdminHeader'
 import AdminNavigationHeader from '../AdminNavigationHeader/AdminNavigationHeader'
+import { toast } from 'react-toastify'
 interface emailType {
     user_email: string,
 }
 interface incomeTypesInterface {
-    expense_category: string,
-    expense_type: string,
+    income_type: string,
     id: string
 }
 
@@ -28,13 +28,17 @@ const IncomeEntry = ({ setShowModal,
     const [error, setError] = useState<string>('')
     const [displayMessage, setDisplayMessage] = useState<string>('')
     const moneyRegex = /\d(?=(\d{3})+,)/g;
-
+    const authToken = cookies.AuthToken
 
     const getIncomeTypes = async () => {
 
         try {
 
-            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/income-types`)
+            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/income-types`, {
+                headers: {
+                    Authorization: authToken,
+                }
+            })
             const data = await response.json()
             setIncomeTypes(data)
 
@@ -91,7 +95,14 @@ const IncomeEntry = ({ setShowModal,
             })
             if (response.status === 200) {
                 setDisplayMessage('')
-                // getData()
+                setIncomeAmount('')
+                setIncomeDate('')
+                setIncomeTypes([{
+                    income_type: '',
+                    id: ''
+                }])
+                getIncomeTypes()
+                toast.success("Receita lançada! 😎");
             }
 
         } catch (error) {

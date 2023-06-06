@@ -22,12 +22,17 @@ const ModifyIncome = () => {
     const [cookies, ,] = useCookies<any>(undefined)
     const [showExpenses, setShowExpenses] = useState<showExpensesType>()
     const userEmail = cookies.Email
+    const authToken = cookies.AuthToken
     const regexMoney = /\d(?=(\d{3})+,)/g;
 
     const getExpenses = async () => {
         try {
 
-            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/expenses/${userEmail}`)
+            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/expenses/${userEmail}`, {
+                headers: {
+                    Authorization: authToken,
+                }
+            })
             const data = await response.json()
             setShowExpenses(data)
 

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useCookies } from 'react-cookie'
+import { toast } from "react-toastify";
 import './styles.scss'
 import AdminHeader from '../AdminHeader/AdminHeader'
 import AdminNavigationHeader from '../AdminNavigationHeader/AdminNavigationHeader'
@@ -31,11 +32,16 @@ const ExpenseEntry = () => {
     const [error, setError] = useState<string>('')
     const [displayMessage, setDisplayMessage] = useState<string>('')
     const moneyRegex = /\d(?=(\d{3})+,)/g;
+    const authToken = cookies.AuthToken
 
     const showExpenseCategory = async () => {
         try {
 
-            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/expense-categories`)
+            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/expense-categories`, {
+                headers: {
+                    Authorization: authToken,
+                }
+            })
             const data = await response.json()
             setExpenseCategories(data)
 
@@ -49,7 +55,11 @@ const ExpenseEntry = () => {
 
         try {
 
-            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/expense-types/${categoryId}`)
+            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/expense-types/${categoryId}`, {
+                headers: {
+                    Authorization: authToken,
+                }
+            })
             const data = await response.json()
             setExpenseTypes(data)
 
@@ -138,7 +148,19 @@ const ExpenseEntry = () => {
             })
             if (response.status === 200) {
                 setDisplayMessage('')
-                // getData()
+                setExpenseAmount('')
+                setExpenseDate('')
+                setExpenseCategories([{
+                    expense_category: '',
+                    id: ''
+                }])
+                setExpenseTypes([{
+                    expense_category: '',
+                    expense_type: '',
+                    id: ''
+                }])
+                showExpenseCategory()
+                toast.success("Despesa lançada! 😎");
             }
 
         } catch (error) {

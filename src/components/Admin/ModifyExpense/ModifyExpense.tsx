@@ -62,8 +62,7 @@ const ModifyExpense = () => {
     const [expenseCategoryName, setExpenseCategoryName] = useState<string>('')
     const [expenseTypeName, setExpenseTypeName] = useState<string>('')
     const [expenseAmount, setExpenseAmount] = useState<string>('')
-    const [expenseDate, setExpenseDate] = useState<string>('')
-    // const [formattedDate, setFormattedDate] = useState<string>('')
+    const [expenseDate, setExpenseDate] = useState<string>('')    
     const [expenseMonth, setExpenseMonth] = useState<string>('')
     const [expenseYear, setExpenseYear] = useState<string>('')
     const [error, setError] = useState<string>('')
@@ -109,7 +108,6 @@ const ModifyExpense = () => {
             const dateMonth = data[0].expense_date.substring(5, 7)
             const dateDay = data[0].expense_date.substring(8, 10)
             const expenseDate = `${dateYear}-${dateMonth}-${dateDay}`
-            console.log(expenseDate)
             setExpenseDate(expenseDate)
             setShowModal(true)
         } catch (error) {
@@ -215,6 +213,7 @@ const ModifyExpense = () => {
     const updateExpense = async (e: any) => {
         e.preventDefault()
         const formattedAmount = expenseAmount.replace(',', '.').replace(moneyRegex, '$&.')
+        console.log(formattedAmount)
         const expenseDataDate = expenseData[0].expense_date.slice(0, 10)
 
         if (expenseTypeName === '' || formattedAmount === '' || expenseCategoryName === '' || expenseDate === '') {
@@ -251,6 +250,11 @@ const ModifyExpense = () => {
                 getExpenses()
                 setError('')
             }
+
+            if (response.status !== 200) {
+                toast.error("Houve um erro, tente novamente. 😐");
+            }
+
         } catch (error) {
             console.error(error)
         }

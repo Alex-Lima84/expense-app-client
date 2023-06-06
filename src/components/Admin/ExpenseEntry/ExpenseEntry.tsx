@@ -163,9 +163,12 @@ const ExpenseEntry = () => {
                 toast.success("Despesa lançada! 😎");
             }
 
+            if (response.status !== 200) {
+                toast.error("Houve um erro, tente novamente. 😐");                
+            }
+
         } catch (error) {
-            console.error(error)
-            setError('Ocorreu um erro, tente novamente.')
+            console.error(error)          
         }
     }
 

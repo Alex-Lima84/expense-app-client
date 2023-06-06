@@ -105,9 +105,12 @@ const IncomeEntry = ({ setShowModal,
                 toast.success("Receita lançada! 😎");
             }
 
+            if (response.status !== 200) {
+                toast.error("Houve um erro. 😐");
+            }
+
         } catch (error) {
             console.error(error)
-            setError('Ocorreu um erro, tente novamente.')
         }
     }
 

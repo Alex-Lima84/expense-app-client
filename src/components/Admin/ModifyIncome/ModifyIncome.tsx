@@ -3,38 +3,83 @@ import AdminHeader from '../AdminHeader/AdminHeader';
 import AdminNavigationHeader from '../AdminNavigationHeader/AdminNavigationHeader';
 import { useEffect, useState } from 'react';
 import { useCookies } from 'react-cookie';
+import { toast } from 'react-toastify';
 
-interface showExpensesType {
+interface showIncomesInterface {
     map(arg0: (option: any) => import("react/jsx-runtime").JSX.Element): import("react").ReactNode;
-    expense_type: string,
-    expense_amount: string,
-    expense_category: string,
-    expense_date: Date,
-    expense_year: string,
-    expense_month: string
+    income_type: string,
+    income_amount: string,
+    income_category: string,
+    income_date: Date,
+    income_year: string,
+    income_month: string
     id: string,
     user_email: string,
     created_at: string,
     updated_at: string
 }
 
+interface incomeInterface {
+    income_type: string,
+    income_amount: string,
+    income_date: string,
+    income_year: string,
+    income_month: string,
+    id: string,
+    updated_at: string
+}
+
+type incomeType = incomeInterface[]
+
+interface incomeCategoryType {
+    income_category: string,
+    id: string
+}
+interface incomeTypesInterface {
+    income_category: string,
+    income_type: string,
+    id: string
+}
+
 const ModifyIncome = () => {
+    const [incomeData, setincomeData] = useState<incomeType>([{
+        income_type: '',
+        income_amount: '',
+        income_date: '',
+        income_year: '',
+        income_month: '',
+        id: '',
+        updated_at: ''
+    }])
     const [cookies, ,] = useCookies<any>(undefined)
-    const [showExpenses, setShowExpenses] = useState<showExpensesType>()
+    const [showincomes, setShowincomes] = useState<showIncomesInterface>()
+    const [showModal, setShowModal] = useState<boolean>(false)
+    const [id, setId] = useState<string>('')
+    const [incomeTypes, setincomeTypes] = useState<incomeTypesInterface[]>()
+    const [incomeCategories, setincomeCategories] = useState<incomeCategoryType[]>()
+    const [incomeCategoryName, setincomeCategoryName] = useState<string>('')
+    const [incomeTypeName, setincomeTypeName] = useState<string>('')
+    const [incomeAmount, setincomeAmount] = useState<string>('')
+    const [incomeDate, setincomeDate] = useState<string>('')
+    // const [formattedDate, setFormattedDate] = useState<string>('')
+    const [incomeMonth, setincomeMonth] = useState<string>('')
+    const [incomeYear, setincomeYear] = useState<string>('')
+    const [error, setError] = useState<string>('')
     const userEmail = cookies.Email
     const authToken = cookies.AuthToken
-    const regexMoney = /\d(?=(\d{3})+,)/g;
+    const moneyRegex = /\d(?=(\d{3})+,)/g;
 
-    const getExpenses = async () => {
+    const getincomes = async () => {
         try {
 
-            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/expenses/${userEmail}`, {
+            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/incomes/${userEmail}`, {
                 headers: {
                     Authorization: authToken,
                 }
             })
+
             const data = await response.json()
-            setShowExpenses(data)
+            setShowincomes(data)
 
         } catch (error) {
             console.error(error)
@@ -42,39 +87,151 @@ const ModifyIncome = () => {
     }
 
     useEffect(() => {
-        getExpenses()
+        getincomes()
     }, [])
+
+    const getincomeInfo = async (incomeId: string) => {
+
+        try {
+            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/income/${userEmail}/${incomeId}`, {
+                headers: {
+                    Authorization: authToken,
+                }
+            })
+            const data = await response.json()
+
+            getincomeTypes()
+            setincomeData(data)
+            setId(incomeId)
+            setincomeAmount(data[0].income_amount)
+            const dateYear = data[0].income_date.substring(0, 4)
+            const dateMonth = data[0].income_date.substring(5, 7)
+            const dateDay = data[0].income_date.substring(8, 10)
+            const incomeDate = `${dateYear}-${dateMonth}-${dateDay}`
+            setincomeDate(incomeDate)
+            setincomeMonth(dateMonth)
+            setincomeYear(dateYear)
+            setShowModal(true)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const showOrHideModal = () => {
+        if (!showModal) {
+            setShowModal(true)
+            document.body.classList.add('no-scroll');
+            window.scrollTo(0, 0);
+        }
+
+        if (showModal) {
+            setShowModal(false)
+            document.body.classList.remove('no-scroll');
+        }
+    };
+
+
+    const getincomeTypes = async () => {
+
+        try {
+            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/income-types`, {
+                headers: {
+                    Authorization: authToken,
+                }
+            })
+            const data = await response.json()
+            setincomeTypes(data)
+
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
+    const handleNewincomeDate = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const inputDate = e.target.value
+        const date = inputDate.split('-')
+        const year = date[0]
+        const month = date[1]
+        setincomeDate(inputDate)
+        setincomeMonth(month)
+        setincomeYear(year)
+    }
+
+    const updateincome = async (e: any) => {
+        e.preventDefault()
+        const formattedAmount = incomeAmount.replace(',', '.').replace(moneyRegex, '$&.')
+        console.log(formattedAmount)
+        const incomeDataDate = incomeData[0].income_date.slice(0, 10)
+
+        if (incomeTypeName === '' || formattedAmount === '' || incomeDate === '') {
+            setError('Por favor, preencha todas as informações.')
+            return
+        }
+
+        if (incomeTypeName === incomeData[0].income_type &&
+            incomeAmount === incomeData[0].income_amount &&
+            incomeDate === incomeDataDate) {
+            setError('Não houve modificação em pelo menos um campo.')
+            return
+        }
+
+        try {
+            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/income/${userEmail}/${id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    incomeTypeName,
+                    incomeAmount: formattedAmount,
+                    incomeDate,
+                    incomeYear,
+                    incomeMonth,
+                    userEmail,
+                    id
+                })
+            })
+            if (response.status === 200) {
+                toast.success("Receita modificada! 😎");
+                setShowModal(false)
+                getincomes()
+                setError('')
+            }
+
+            if (response.status !== 200) {
+                toast.error("Houve um erro, tente novamente. 😐");
+            }
+
+        } catch (error) {
+            console.error(error)
+        }
+    }
 
     return (
         <>
             <AdminHeader />
-            <div className='modify-expense-container'>
+            <div className='modify-income-container'>
                 <AdminNavigationHeader />
-                <div className='expenses-list-container'>
-                    <h2>Abaixo estão listadas as 10 últimas receitas lançadas</h2>
+                <div className='incomes-list-container'>
+                    <h2>Abaixo estão listadas as 10 últimas despesas lançadas</h2>
                     <thead>
                         <tr>
                             <th>Tipo</th>
-                            <th>Categoria</th>
                             <th>Valor</th>
-                            <th>Ano</th>
-                            <th>Mês</th>
+                            <th>Data</th>
                             <th>Editar</th>
                             <th>Deletar</th>
                         </tr>
                     </thead>
-                    {showExpenses ? showExpenses.map((expense: any) => (
-                        <tr className='expenses-list'
-                            key={expense.id}
+                    {showincomes ? showincomes.map((income: any) => (
+
+                        <tr className='incomes-list'
+                            key={income.id}
                         >
-                            <td>{expense.expense_type}</td>
-                            <td>{expense.expense_category}</td>
-                            <td>R${' '} {expense.expense_amount
+                            <td>{income.income_type}</td>
+                            <td>R${' '} {income.income_amount
                                 .replace('.', ',')
-                                .replace(regexMoney, '$&.')}</td>
-                            <td>{expense.expense_year}</td>
-                            <td>{expense.expense_month}</td>
-                            <td className='edit-button'>
+                                .replace(moneyRegex, '$&.')}</td>
+                            <td>{income.income_date}</td>
+                            <td onClick={() => getincomeInfo(income.id)} className='edit-button'>
                                 <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 576 512">
                                     <path d="M402.6 83.2l90.2 90.2c3.8 3.8 3.8 10 0 13.8L274.4 405.6l-92.8 10.3c-12.4 1.4-22.9-9.1-21.5-21.5l10.3-92.8L388.8 83.2c3.8-3.8 10-3.8 13.8 0zm162-22.9l-48.8-48.8c-15.2-15.2-39.9-15.2-55.2 0l-35.4 35.4c-3.8 3.8-3.8 10 0 13.8l90.2 90.2c3.8 3.8 10 3.8 13.8 0l35.4-35.4c15.2-15.3 15.2-40 0-55.2zM384 346.2V448H64V128h229.8c3.2 0 6.2-1.3 8.5-3.5l40-40c7.6-7.6 2.2-20.5-8.5-20.5H48C21.5 64 0 85.5 0 112v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V306.2c0-10.7-12.9-16-20.5-8.5l-40 40c-2.2 2.3-3.5 5.3-3.5 8.5z" />
                                 </svg>
@@ -88,6 +245,62 @@ const ModifyIncome = () => {
                     )) : ''}
                 </div>
             </div>
+            {showModal &&
+                <div id="income-edit">
+                    <div className="income-edit-modal-container">
+                        <div className="close-button-container">
+                            <button onClick={showOrHideModal}>
+                                X
+                            </button>
+                        </div>
+                        <div className='income-form-container'>
+                            <form className='income-form'>
+                                <h2>Preencha os dados abaixo para modificar a despesa</h2>
+                                <div className='choice-container'>
+                                    <h3>Tipo de despesa atual: <strong>{incomeData[0].income_type}</strong></h3>
+                                    <label>Escolha o tipo de despesa:</label>
+                                    <select
+                                        onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setincomeTypeName(e.target.value)}
+                                    >
+                                        <option value="">Selecione...</option>
+                                        {incomeTypes ? incomeTypes.map((option: any) => (
+                                            <option
+                                                key={option.id}
+                                                value={option.income_type}
+                                            >
+                                                {option.income_type}
+                                            </option>
+                                        )) : ''}
+                                    </select >
+                                </div>
+                                <div className='choice-container'>
+                                    <label>Informe o valor da despesa:</label>
+                                    <input
+                                        value={incomeAmount.replace(moneyRegex, '$&.')}
+                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => { setincomeAmount(e.target.value) }}
+                                    />
+                                </div>
+                                <div className='choice-container'>
+                                    <label>Informe a data da despesa:</label>
+                                    <input
+                                        type="date"
+                                        min="1997-01-01" max="2030-12-31" value={incomeDate}
+                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleNewincomeDate(e)}
+                                    />
+                                </div>
+                                {error !== '' ? <p className='error-message'>{error}</p> : ''}
+                                <div className='submit-button-container'>
+                                    <input
+                                        className='submit-income'
+                                        type='submit'
+                                        value='Enviar'
+                                        onClick={updateincome}
+                                    />
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>}
         </>
     );
 

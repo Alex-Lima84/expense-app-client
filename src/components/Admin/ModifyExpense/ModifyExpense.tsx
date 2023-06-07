@@ -4,6 +4,7 @@ import AdminNavigationHeader from '../AdminNavigationHeader/AdminNavigationHeade
 import { useEffect, useState } from 'react';
 import { useCookies } from 'react-cookie';
 import { toast } from 'react-toastify';
+import CurrencyInput from 'react-currency-input-field';
 
 interface showExpensesInterface {
     map(arg0: (option: any) => import("react/jsx-runtime").JSX.Element): import("react").ReactNode;
@@ -62,7 +63,7 @@ const ModifyExpense = () => {
     const [expenseCategoryName, setExpenseCategoryName] = useState<string>('')
     const [expenseTypeName, setExpenseTypeName] = useState<string>('')
     const [expenseAmount, setExpenseAmount] = useState<string>('')
-    const [expenseDate, setExpenseDate] = useState<string>('')    
+    const [expenseDate, setExpenseDate] = useState<string>('')
     const [expenseMonth, setExpenseMonth] = useState<string>('')
     const [expenseYear, setExpenseYear] = useState<string>('')
     const [error, setError] = useState<string>('')
@@ -349,10 +350,15 @@ const ModifyExpense = () => {
                                 </div>
                                 <div className='choice-container'>
                                     <label>Informe o valor da despesa:</label>
-                                    <input
-                                        value={expenseAmount.replace('.', ',')
-                                            .replace(moneyRegex, '$&.')}
-                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => { setExpenseAmount(e.target.value) }}
+                                    <CurrencyInput
+                                        value={expenseAmount}
+                                        onValueChange={(value) =>
+                                            setExpenseAmount(value!)
+                                        }
+                                        prefix={'R$ '}
+                                        decimalsLimit={2}
+                                        decimalSeparator={','}
+                                        groupSeparator={'.'}
                                     />
                                 </div>
                                 <div className='choice-container'>

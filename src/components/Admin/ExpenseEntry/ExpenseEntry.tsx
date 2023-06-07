@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import './styles.scss'
 import AdminHeader from '../AdminHeader/AdminHeader'
 import AdminNavigationHeader from '../AdminNavigationHeader/AdminNavigationHeader'
+import CurrencyInput from 'react-currency-input-field';
 interface emailInterface {
     user_email: string,
 }
@@ -164,11 +165,11 @@ const ExpenseEntry = () => {
             }
 
             if (response.status !== 200) {
-                toast.error("Houve um erro, tente novamente. 😐");                
+                toast.error("Houve um erro, tente novamente. 😐");
             }
 
         } catch (error) {
-            console.error(error)          
+            console.error(error)
         }
     }
 
@@ -246,9 +247,15 @@ const ExpenseEntry = () => {
                         </div>
                         <div className='choice-container'>
                             <label>Informe o valor da despesa:</label>
-                            <input
+                            <CurrencyInput
                                 value={expenseAmount}
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => { setExpenseAmount(e.target.value) }}
+                                onValueChange={(value) =>
+                                    setExpenseAmount(value!)
+                                }
+                                prefix={'R$ '}
+                                decimalsLimit={2}
+                                decimalSeparator={','}
+                                groupSeparator={'.'}
                             />
                         </div>
                         <div className='choice-container'>

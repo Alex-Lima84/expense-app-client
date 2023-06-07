@@ -1,11 +1,10 @@
 import { useState, useEffect } from 'react'
 import { useCookies } from 'react-cookie'
-
-import './styles.scss'
-import AdminHome from '../Home/AdminHome'
 import AdminHeader from '../AdminHeader/AdminHeader'
 import AdminNavigationHeader from '../AdminNavigationHeader/AdminNavigationHeader'
 import { toast } from 'react-toastify'
+import './styles.scss'
+import CurrencyInput from 'react-currency-input-field'
 interface emailType {
     user_email: string,
 }
@@ -86,7 +85,7 @@ const IncomeEntry = ({ setShowModal,
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     incomeTypeName,
-                    incomeAmount: formattedAmount,
+                    incomeAmount,
                     incomeDate: formattedDate,
                     incomeYear,
                     incomeMonth,
@@ -140,9 +139,15 @@ const IncomeEntry = ({ setShowModal,
                         </div>
                         <div className='choice-container'>
                             <label>Informe o valor da receita:</label>
-                            <input
+                            <CurrencyInput
                                 value={incomeAmount}
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => { setIncomeAmount(e.target.value) }}
+                                onValueChange={(value) =>
+                                    setIncomeAmount(value!)
+                                }
+                                prefix={'R$ '}
+                                decimalsLimit={2}
+                                decimalSeparator={','}
+                                groupSeparator={'.'}
                             />
                         </div>
                         <div className='choice-container'>

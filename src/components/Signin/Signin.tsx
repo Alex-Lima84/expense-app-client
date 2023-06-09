@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useCookies } from 'react-cookie'
 import { Link } from 'react-router-dom'
-import History from '../../Services/History'
+import History from '../../services/History'
 import './styles.scss'
 
 const Signin = () => {

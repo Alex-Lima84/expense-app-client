@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useCookies } from 'react-cookie'
-import History from '../../Services/History'
+import History from '../../services/History'
 import { Link } from 'react-router-dom'
 import './styles.scss'
 
@@ -9,8 +9,6 @@ const Login = () => {
     const [email, setEmail] = useState<string>('alexandre.cerutti@live.com')
     const [password, setPassword] = useState<string>('123')
     const [error, setError] = useState<string>('')
-    const [confirmAccess, setConfirmAccess] = useState<boolean>(false)
-
 
     const handleSubmit = async (e: React.FormEvent<HTMLInputElement>) => {
         e.preventDefault()

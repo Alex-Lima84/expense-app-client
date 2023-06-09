@@ -1,5 +1,5 @@
 import { useCookies } from 'react-cookie'
-import History from '../../../Services/History'
+import History from '../../../services/History'
 import './styles.scss'
 
 const AdminHeader = () => {

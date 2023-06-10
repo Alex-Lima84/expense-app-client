@@ -1,16 +1,21 @@
 import { useCookies } from 'react-cookie'
-import History from '../../../services/History'
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux'
+import { logout } from '../../../redux/userSlice';
 import './styles.scss'
 
 const AdminHeader = () => {
     const [, , removeCookie] = useCookies();
+    const navigate = useNavigate();
+    const dispatch = useDispatch()
 
     const signOut = () => {
-        History.push('/')
-        window.location.reload()
         removeCookie('Email')
         removeCookie('AuthToken')
-        localStorage.removeItem('@Expense:token');
+        dispatch(
+            logout(false)
+        )
+        navigate('/');
     }
 
     return (

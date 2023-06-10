@@ -1,14 +1,20 @@
 import { useState } from 'react'
 import { useCookies } from 'react-cookie'
-import History from '../../services/History'
+import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom'
+import { login } from '../../redux/userSlice'
+import { useDispatch } from 'react-redux'
 import './styles.scss'
 
 const Login = () => {
-    const [, setCookie,] = useCookies<string>(undefined)
-    const [email, setEmail] = useState<string>('alexandre.cerutti@live.com')
-    const [password, setPassword] = useState<string>('123')
+    const [cookies, setCookie,] = useCookies<string>(undefined)
+    const [email, setEmail] = useState<string>('')
+    const [password, setPassword] = useState<string>('')
     const [error, setError] = useState<string>('')
+    const navigate = useNavigate();
+    const dispatch = useDispatch()
+
+
 
     const handleSubmit = async (e: React.FormEvent<HTMLInputElement>) => {
         e.preventDefault()
@@ -31,17 +37,12 @@ const Login = () => {
             return
         }
 
-        const firstSigninToken = localStorage.getItem('@First-signin');
-
-        if (firstSigninToken) {
-            localStorage.removeItem('@First-signin');
-        }
-
-        setCookie('Email', data.email, { path: '/admin/home' })
-        setCookie('AuthToken', data.token, { path: '/admin/home' })
-        localStorage.setItem('@Expense:token', JSON.stringify(data.token));
-        History.push('/admin/home');
-        window.location.reload()
+        dispatch(
+            login(true)
+        )
+        setCookie('Email', data.email)
+        setCookie('AuthToken', data.token)
+        navigate('/admin/home');
     }
 
     return (

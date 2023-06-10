@@ -1,18 +1,17 @@
 import { useState } from 'react'
-import { useCookies } from 'react-cookie'
 import { Link } from 'react-router-dom'
-import History from '../../services/History'
+import { useNavigate } from 'react-router-dom';
 import './styles.scss'
 
 const Signin = () => {
-    const [, setCookie,] = useCookies<string>(undefined)
+
     const [email, setEmail] = useState<string>('')
     const [firstName, setFirstName] = useState<string>('')
     const [lastName, setLastName] = useState<string>('')
     const [password, setPassword] = useState<string>('')
     const [confirmPassword, setConfirmPassword] = useState<string>('')
     const [error, setError] = useState<string>('')
-
+    const navigate = useNavigate();
 
     const handleSubmit = async (e: React.FormEvent<HTMLInputElement>) => {
         e.preventDefault()
@@ -45,10 +44,7 @@ const Signin = () => {
             }
         }
 
-        // setCookie('Email', data.email, { path: '/admin/home' })
-        // setCookie('AuthToken', data.token, { path: '/admin/home' })
-        localStorage.setItem('@First-signin', JSON.stringify(data.email));
-        History.push('/login');
+        navigate('/login');
         window.location.reload()
 
     }

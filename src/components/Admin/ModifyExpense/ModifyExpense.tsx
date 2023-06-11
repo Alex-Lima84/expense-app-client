@@ -72,15 +72,16 @@ const ModifyExpense = () => {
     const moneyRegex = /\d(?=(\d{3})+,)/g;
 
     const getExpenses = async () => {
+        const expenseQuantity = 10
         try {
 
-            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/expenses/${userEmail}`, {
+            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/expenses/${userEmail}/${expenseQuantity}`, {
                 headers: {
                     Authorization: authToken,
                 }
             })
 
-            const data = await response.json()
+            const data = await response.json()           
             setShowExpenses(data)
 
         } catch (error) {

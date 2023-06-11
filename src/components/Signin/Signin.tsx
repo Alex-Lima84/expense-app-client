@@ -44,9 +44,7 @@ const Signin = () => {
             }
         }
 
-        navigate('/login');
-        window.location.reload()
-
+        navigate('/login');   
     }
 
     return (

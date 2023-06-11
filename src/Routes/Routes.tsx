@@ -7,6 +7,7 @@ import ModifyExpense from '../components/Admin/ModifyExpense/ModifyExpense';
 import ModifyIncome from '../components/Admin/ModifyIncome/ModifyIncome';
 import ExpenseEntry from '../components/Admin/ExpenseEntry/ExpenseEntry';
 import IncomeEntry from '../components/Admin/IncomeEntry/IncomeEntry';
+import ShowAllExpenses from '../components/Admin/ShowAllExpenses/ShowAllExpenses';
 import { useSelector } from 'react-redux';
 import { selectUser } from '../redux/userSlice';
 
@@ -26,6 +27,7 @@ const AppRoutes = () => {
             <Route path="/admin/income-entry" element={<IncomeEntry />} />
             <Route path="/admin/modify-expense" element={<ModifyExpense />} />
             <Route path="/admin/modify-income" element={<ModifyIncome />} />
+            <Route path="/admin/show-expenses" element={<ShowAllExpenses />} />
           </>
         ) : (
           <Route path="/admin/*" element={<Navigate to="/" replace />} />

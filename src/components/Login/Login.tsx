@@ -8,8 +8,8 @@ import './styles.scss'
 
 const Login = () => {
     const [cookies, setCookie,] = useCookies<string>(undefined)
-    const [email, setEmail] = useState<string>('')
-    const [password, setPassword] = useState<string>('')
+    const [email, setEmail] = useState<string>('alexandre.cerutti@live.com')
+    const [password, setPassword] = useState<string>('123')
     const [error, setError] = useState<string>('')
     const navigate = useNavigate();
     const dispatch = useDispatch()
@@ -19,7 +19,7 @@ const Login = () => {
     const handleSubmit = async (e: React.FormEvent<HTMLInputElement>) => {
         e.preventDefault()
 
-        if (email === null || password === null) {
+        if (!email || !password) {
             setError('Please fill all the required info')
             return
         }

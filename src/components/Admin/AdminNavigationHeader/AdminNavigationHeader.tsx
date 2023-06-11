@@ -11,8 +11,8 @@ const AdminNavigationHeader = () => {
                 <Link to='/admin/modify-expense'>Modificar despesa</Link>
                 <Link to='/admin/income-entry'>Adicionar receita</Link>
                 <Link to='/admin/modify-income'>Modificar receita</Link>
-                <Link to='/admin/expense-view'>Visualizar despesas</Link>
-                <Link to='/admin/income-view'>Visualizar receitas</Link>
+                <Link to='/admin/show-expenses'>Visualizar despesas</Link>
+                <Link to='/admin/show-incomes'>Visualizar receitas</Link>
             </div>
             <div></div>
         </div>

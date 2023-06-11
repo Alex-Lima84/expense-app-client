@@ -16,7 +16,7 @@ const Signin = () => {
     const handleSubmit = async (e: React.FormEvent<HTMLInputElement>) => {
         e.preventDefault()
 
-        if (email === null || firstName === null || lastName === null || password === null || confirmPassword === null) {
+        if (!email || !firstName || !lastName || !password || !confirmPassword) {
             setError('Please fill all the required info')
             return
         }
@@ -44,7 +44,7 @@ const Signin = () => {
             }
         }
 
-        navigate('/login');   
+        navigate('/login');
     }
 
     return (

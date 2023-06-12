@@ -173,34 +173,6 @@ const ExpenseEntry = () => {
         }
     }
 
-    // const editData = async (e: any) => {
-    //     e.preventDefault()
-
-    //     try {
-    //         const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/todos/${task.id}`, {
-    //             method: 'PUT',
-    //             headers: { 'Content-Type': 'application/json' },
-    //             body: JSON.stringify(data)
-    //         })
-    //         if (response.status === 200) {
-    //             console.log('The todo was updated')
-    //             setShowModal(false)
-    //             getData()
-    //         }
-    //     } catch (error) {
-    //         console.error(error)
-    //     }
-    // }     
-
-    // const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-
-    //     const { name, value } = e.target
-    //     setData(data => ({
-    //         ...data,
-    //         [name]: value
-    //     }))
-    // }
-
     useEffect(() => {
         showExpenseCategory()
     }, [])

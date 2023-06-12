@@ -1,7 +1,7 @@
 import { Route, Routes, BrowserRouter, Navigate } from 'react-router-dom';
 import Login from '../components/Login/Login';
 import Signin from '../components/Signin/Signin';
-import AdminHome from '../components/Admin/Home/AdminHome';
+import AdminHome from '../components/Admin/AdminHome/AdminHome';
 import Home from '../components/Home/Home';
 import ModifyExpense from '../components/Admin/ModifyExpense/ModifyExpense';
 import ModifyIncome from '../components/Admin/ModifyIncome/ModifyIncome';

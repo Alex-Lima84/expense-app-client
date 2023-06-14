@@ -21,8 +21,9 @@ const ShowAllExpenses = () => {
     const [cookies, ,] = useCookies<any>(undefined)
     const [listOfExpenseYear, setListOfExpenseYear] = useState<showExpensesInterface>()
     const [expenseMonths, setExpenseMonths] = useState<any>([])
-    const [expenseMonthsValues, setExpenseMonthsValues] = useState<string[]>([])
     const [expenseYears, setExpenseYears] = useState<string[]>([])
+    const [currentExpenseYear, setCurrentExpenseYear] = useState<string>('')
+    const [expensesByMonth, setExpensesByMonth] = useState<any>()
     const userEmail = cookies.Email
     const authToken = cookies.AuthToken
 
@@ -54,7 +55,7 @@ const ShowAllExpenses = () => {
             expenseYearArray.sort((a, b) => a.localeCompare(b));
 
             setExpenseYears(expenseYearArray)
-        }       
+        }
 
     }, [listOfExpenseYear])
 
@@ -63,11 +64,13 @@ const ShowAllExpenses = () => {
         getListOfYears()
     }, [])
 
-    const getExpenseMonths = async (expenseYear: any) => {
+    const getExpenseMonths = async (expenseYear: string) => {
+        setCurrentExpenseYear(expenseYear)
+        setExpenseMonths([])
 
         try {
 
-            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/expenses/${expenseYear}`, {
+            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/expenses-month/${expenseYear}/${userEmail}`, {
                 headers: {
                     Authorization: authToken,
                 }
@@ -78,6 +81,47 @@ const ShowAllExpenses = () => {
         } catch (error) {
             console.error(error)
         }
+    }
+
+    const getExpensesByMonth = async (expenseMonth: string) => {
+
+        try {
+
+            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/expenses-month/${expenseMonth}/${currentExpenseYear}/${userEmail}`, {
+                headers: {
+                    Authorization: authToken,
+                }
+            })
+            const data = await response.json()
+            console.log(data)
+            setExpensesByMonth(data)
+
+        } catch (error) {
+            console.error(error)
+        }
+    }  
+
+    if (expensesByMonth) {        
+        
+        const classifiedExpenses = expensesByMonth.reduce((acc: { expense_category: any; expenses: any[]; }[], expense: { expense_category: any; }) => {
+            const { expense_category } = expense;
+            
+            // Check if the expense_category already exists in the accumulator
+            const existingCategory = acc.find((item: { expense_category: any; }) => item.expense_category === expense_category);
+            
+            if (existingCategory) {
+                // If the expense_category exists, push the expense object to its expenses array
+                existingCategory.expenses.push(expense);
+            } else {
+                // If the expense_category doesn't exist, create a new category with the expense object
+                acc.push({ expense_category, expenses: [expense] });
+            }
+            
+            return acc;
+        }, []);
+        
+        console.log(classifiedExpenses);       
+        
     }
 
     return (
@@ -104,7 +148,7 @@ const ShowAllExpenses = () => {
                 <div className='choice-container'>
                     <label>Escolha o mês:</label>
                     <select
-                    // onChange={(e: React.ChangeEvent<HTMLSelectElement>) => { getExpenseMonths(e.target.value) }}
+                        onChange={(e: React.ChangeEvent<HTMLSelectElement>) => { getExpensesByMonth(e.target.value) }}
                     >
                         <option value="">Selecione...</option>
                         {expenseMonths ? expenseMonths.map((option: any, index: any) => (

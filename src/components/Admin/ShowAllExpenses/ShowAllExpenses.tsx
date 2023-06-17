@@ -24,6 +24,15 @@ const ShowAllExpenses = () => {
     const [expenseYears, setExpenseYears] = useState<string[]>([])
     const [currentExpenseYear, setCurrentExpenseYear] = useState<string>('')
     const [expensesByMonth, setExpensesByMonth] = useState<any>()
+    const [formattedExpenses, setFormattedExpenses] = useState<any>()
+    const [homeExpenses, setHomeExpenses] = useState<string[]>([]);
+    const [transportationExpenses, setTransportationExpenses] = useState<string[]>([]);
+    const [vehicleExpenses, setVehicleExpenses] = useState<string[]>([]);
+    const [healthExpenses, setHealthExpenses] = useState<string[]>([]);
+    const [personalExpenses, setPersonalExpenses] = useState<string[]>([]);
+    const [leisureExpenses, setLeisureExpenses] = useState<string[]>([]);
+    const [educationExpenses, setEducationExpenses] = useState<string[]>([]);
+    const [dependentsExpenses, setDependentsExpenses] = useState<string[]>([]);
     const userEmail = cookies.Email
     const authToken = cookies.AuthToken
 
@@ -46,6 +55,11 @@ const ShowAllExpenses = () => {
     }
 
     useEffect(() => {
+        getListOfYears()
+    }, [])
+
+
+    useEffect(() => {
         if (listOfExpenseYear) {
             let expenseYearArray: string[] = []
             listOfExpenseYear.forEach((expense) => {
@@ -58,11 +72,6 @@ const ShowAllExpenses = () => {
         }
 
     }, [listOfExpenseYear])
-
-
-    useEffect(() => {
-        getListOfYears()
-    }, [])
 
     const getExpenseMonths = async (expenseYear: string) => {
         setCurrentExpenseYear(expenseYear)
@@ -82,6 +91,7 @@ const ShowAllExpenses = () => {
             console.error(error)
         }
     }
+    
 
     const getExpensesByMonth = async (expenseMonth: string) => {
 
@@ -93,36 +103,98 @@ const ShowAllExpenses = () => {
                 }
             })
             const data = await response.json()
-            console.log(data)
             setExpensesByMonth(data)
 
         } catch (error) {
             console.error(error)
         }
-    }  
-
-    if (expensesByMonth) {        
-        
-        const classifiedExpenses = expensesByMonth.reduce((acc: { expense_category: any; expenses: any[]; }[], expense: { expense_category: any; }) => {
-            const { expense_category } = expense;
-            
-            // Check if the expense_category already exists in the accumulator
-            const existingCategory = acc.find((item: { expense_category: any; }) => item.expense_category === expense_category);
-            
-            if (existingCategory) {
-                // If the expense_category exists, push the expense object to its expenses array
-                existingCategory.expenses.push(expense);
-            } else {
-                // If the expense_category doesn't exist, create a new category with the expense object
-                acc.push({ expense_category, expenses: [expense] });
-            }
-            
-            return acc;
-        }, []);
-        
-        console.log(classifiedExpenses);       
-        
     }
+
+    useEffect(() => {      
+
+        if (expensesByMonth) {
+
+            const classifiedExpenses = expensesByMonth.reduce((acc: { expense_category: any; expenses: any[]; }[], expense: { expense_category: any; }) => {
+                const { expense_category } = expense;
+
+                const existingCategory = acc.find((item: { expense_category: any; }) => item.expense_category === expense_category);
+
+                if (existingCategory) {
+                    existingCategory.expenses.push(expense);
+                } else {
+                    acc.push({ expense_category, expenses: [expense] });
+                }
+
+                return acc;
+            }, []);
+
+            const summedExpenses = classifiedExpenses.map((category: { expenses: any[]; expense_category: any; }) => {
+                const expenseMap = new Map<string, number>();
+
+                category.expenses.forEach((expense: { expense_amount: string; expense_type: string; }) => {
+                    const amount = parseFloat(expense.expense_amount);
+                    if (expenseMap.has(expense.expense_type)) {
+                        expenseMap.set(expense.expense_type, expenseMap.get(expense.expense_type)! + amount);
+                    } else {
+                        expenseMap.set(expense.expense_type, amount);
+                    }
+                });
+
+                const summedExpenses = Array.from(expenseMap).map(([expenseType, amount]) => ({
+                    expense_type: expenseType,
+                    expense_amount: amount.toFixed(2),
+                    expense_category: category.expense_category,
+                }));
+
+                return {
+                    expense_category: category.expense_category,
+                    expenses: summedExpenses,
+                };
+            });
+
+            setFormattedExpenses(summedExpenses);
+        }
+
+    }, [expensesByMonth])
+
+    useEffect(() => {
+        if (formattedExpenses) {
+            formattedExpenses.forEach((item: { expense_category: string; expenses: []; }) => {
+
+                const { expense_category, expenses } = item;
+
+                switch (expense_category) {
+                    case "Habitação":
+                        setHomeExpenses(expenses);
+                        break;
+                    case "Transporte":
+                        setTransportationExpenses(expenses);
+                        break;
+                    case "Automóvel":
+                        setVehicleExpenses(expenses);
+                        break;
+                    case "Saúde":
+                        setHealthExpenses(expenses);
+                        break;
+                    case "Despesas pessoais":
+                        setPersonalExpenses(expenses);
+                        break;
+                    case "Lazer":
+                        setLeisureExpenses(expenses);
+                        break;
+                    case "Educação":
+                        setDependentsExpenses(expenses);
+                        break;
+                    case "Dependentes":
+                        setDependentsExpenses(expenses);
+                        break;
+                }
+            });
+        }
+    }, [formattedExpenses])
+
+    console.log(homeExpenses)
+    console.log(transportationExpenses)
 
     return (
         <>

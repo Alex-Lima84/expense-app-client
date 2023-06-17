@@ -111,6 +111,8 @@ const ModifyExpense = () => {
             const dateDay = data[0].expense_date.substring(8, 10)
             const expenseDate = `${dateYear}-${dateMonth}-${dateDay}`
             setExpenseDate(expenseDate)
+            setExpenseMonth(dateMonth)
+            setExpenseYear(dateYear)
             setShowModal(true)
         } catch (error) {
             console.log(error)
@@ -214,14 +216,14 @@ const ModifyExpense = () => {
 
     const updateExpense = async (e: any) => {
         e.preventDefault()
-        const formattedAmount = expenseAmount.replace(',', '.').replace(moneyRegex, '$&.')
-        console.log(formattedAmount)
+        const formattedAmount = expenseAmount.replace(',', '.').replace(moneyRegex, '$&.')       
         const expenseDataDate = expenseData[0].expense_date.slice(0, 10)
 
         if (expenseTypeName === '' || formattedAmount === '' || expenseCategoryName === '' || expenseDate === '') {
             setError('Por favor, preencha todas as informações.')
             return
         }
+        console.log(expenseDate)
 
         if (expenseTypeName === expenseData[0].expense_type &&
             expenseAmount === expenseData[0].expense_amount &&
@@ -261,6 +263,7 @@ const ModifyExpense = () => {
             console.error(error)
         }
     }
+    console.log(expenseMonth)
 
     return (
         <>

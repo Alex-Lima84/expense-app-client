@@ -61,6 +61,11 @@ const ShowAllExpenses = () => {
 
 
     useEffect(() => {
+
+        if (!listOfExpenseYear) {
+            return
+        }
+
         if (listOfExpenseYear) {
             let expenseYearArray: string[] = []
             listOfExpenseYear.forEach((expense) => {
@@ -112,6 +117,10 @@ const ShowAllExpenses = () => {
 
     useEffect(() => {
 
+        if (!expenseMonths) {
+            return
+        }
+
         if (expensesByMonth) {
 
             const classifiedExpenses = expensesByMonth.reduce((acc: { expense_category: any; expenses: any[]; }[], expense: { expense_category: any; }) => {
@@ -158,6 +167,11 @@ const ShowAllExpenses = () => {
     }, [expensesByMonth])
 
     useEffect(() => {
+
+        if (!formattedExpenses) {
+            return
+        }
+
         if (formattedExpenses) {
             formattedExpenses.forEach((item: { expense_category: string; expenses: []; }) => {
 
@@ -230,7 +244,7 @@ const ShowAllExpenses = () => {
                         )) : ''}
                     </select >
                 </div>
-                <div>
+                <table>
                     {homeExpenses.length ?
                         <>
                             <h2>Habitação</h2>
@@ -252,8 +266,8 @@ const ShowAllExpenses = () => {
                             </td>
                         </tr>
                     )) : ''}
-                </div>
-                <div>
+                </table>
+                <table>
                     {healthExpenses.length ?
                         <>
                             <h2>Saúde</h2>
@@ -275,8 +289,8 @@ const ShowAllExpenses = () => {
                             </td>
                         </tr>
                     )) : ''}
-                </div>
-                <div>
+                </table>
+                <table>
                     {transportationExpenses.length ?
                         <>
                             <h2>Transporte</h2>
@@ -298,8 +312,8 @@ const ShowAllExpenses = () => {
                             </td>
                         </tr>
                     )) : ''}
-                </div>
-                <div>
+                </table>
+                <table>
                     {vehicleExpenses.length ?
                         <>
                             <h2>Automóvel</h2>
@@ -321,8 +335,8 @@ const ShowAllExpenses = () => {
                             </td>
                         </tr>
                     )) : ''}
-                </div>
-                <div>
+                </table>
+                <table>
                     {personalExpenses.length ?
                         <>
                             <h2>Despesas pessoais</h2>
@@ -344,8 +358,8 @@ const ShowAllExpenses = () => {
                             </td>
                         </tr>
                     )) : ''}
-                </div>
-                <div>
+                </table>
+                <table>
                     {leisureExpenses.length ?
                         <>
                             <h2>Lazer</h2>
@@ -367,8 +381,8 @@ const ShowAllExpenses = () => {
                             </td>
                         </tr>
                     )) : ''}
-                </div>
-                <div>
+                </table>
+                <table>
                     {educationExpenses.length ?
                         <>
                             <h2>Educação</h2>
@@ -390,8 +404,8 @@ const ShowAllExpenses = () => {
                             </td>
                         </tr>
                     )) : ''}
-                </div>
-                <div>
+                </table>
+                <table>
                     {dependentsExpenses.length ?
                         <>
                             <h2>Dependentes</h2>
@@ -413,7 +427,7 @@ const ShowAllExpenses = () => {
                             </td>
                         </tr>
                     )) : ''}
-                </div>
+                </table>
             </div>
         </>
     )

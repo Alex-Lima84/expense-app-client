@@ -1,11 +1,16 @@
 .modify-expense-container {
     display: flex;
-    width: 100vw;
+
+    .modify-expense-table-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
 
     .expenses-list-container {
         display: flex;
         flex-direction: column;
-        width: 100vw;
         justify-content: center;
         align-items: center;
         margin-top: 20px;
@@ -14,41 +19,43 @@
             font-size: 20px;
         }
 
-        thead {        
+        thead {
             margin: 5px 0 20px 0;
-            border: 1px solid;
-            border-radius: 5px;
-            padding: 10px;                   
-
-            tr {
-                th {
-                    width: 100px;
-                    font-size: 16px;                    
-                }
-            }
-        }
-
-        .expenses-list {            
-            margin: 5px 0;
             border: 1px solid;
             border-radius: 5px;
             padding: 10px;
 
-            td {
-                width: 100px;
-                text-align: center;
-                height: 40px;
-                font-size: 14px;
-                vertical-align: middle;
-
+            tr {
+                th {
+                    width: 100px;
+                    font-size: 16px;
+                }
             }
+        }
 
-            .edit-button {
-                cursor: pointer;
-            }
+        tbody {
+            .expenses-list {
+                margin: 5px 0;
+                border: 1px solid;
+                border-radius: 5px;
+                padding: 10px;
 
-            .delete-button {
-                cursor: pointer;
+                td {
+                    width: 100px;
+                    text-align: center;
+                    height: 40px;
+                    font-size: 14px;
+                    vertical-align: middle;
+
+                }
+
+                .edit-button {
+                    cursor: pointer;
+                }
+
+                .delete-button {
+                    cursor: pointer;
+                }
             }
         }
     }

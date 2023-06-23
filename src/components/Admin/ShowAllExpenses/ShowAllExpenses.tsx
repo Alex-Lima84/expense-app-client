@@ -2,9 +2,10 @@ import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie"
 import AdminHeader from "../AdminHeader/AdminHeader";
 import AdminNavigationHeader from "../AdminNavigationHeader/AdminNavigationHeader";
+import './styles.scss'
 
 interface showExpensesInterface {
-    forEach(arg0: (expense: any) => void): unknown;
+    forEach(arg0: (expense: string[]) => void): unknown;
     expense_type: string,
     expense_amount: string,
     expense_category: string,
@@ -68,7 +69,7 @@ const ShowAllExpenses = () => {
 
         if (listOfExpenseYear) {
             let expenseYearArray: string[] = []
-            listOfExpenseYear.forEach((expense) => {
+            listOfExpenseYear.forEach((expense: any) => {
                 expenseYearArray.push(expense.expense_year)
             });
             expenseYearArray = Array.from(new Set(expenseYearArray));
@@ -212,222 +213,228 @@ const ShowAllExpenses = () => {
             <AdminHeader />
             <div className='show-all-expenses-container'>
                 <AdminNavigationHeader />
-                <div className='choice-container'>
-                    <label>Escolha o ano:</label>
-                    <select
-                        onChange={(e: React.ChangeEvent<HTMLSelectElement>) => { getExpenseMonths(e.target.value) }}
-                    >
-                        <option value="">Selecione...</option>
-                        {expenseYears ? expenseYears.map((option: any) => (
-                            <option
-                                key={option}
-                                value={option}
+                <div className="outter-container">
+                    <div className="choices-container">
+                        <div className='choice-container'>
+                            <label>Escolha o ano:</label>
+                            <select
+                                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => { getExpenseMonths(e.target.value) }}
                             >
-                                {option}
-                            </option>
-                        )) : ''}
-                    </select >
-                </div>
-                <div className='choice-container'>
-                    <label>Escolha o mês:</label>
-                    <select
-                        onChange={(e: React.ChangeEvent<HTMLSelectElement>) => { getExpensesByMonth(e.target.value) }}
-                    >
-                        <option value="">Selecione...</option>
-                        {expenseMonths ? expenseMonths.map((option: any, index: any) => (
-                            <option
-                                key={index}
-                                value={option.expense_month}
+                                <option value="">Selecione...</option>
+                                {expenseYears ? expenseYears.map((option: any) => (
+                                    <option
+                                        key={option}
+                                        value={option}
+                                    >
+                                        {option}
+                                    </option>
+                                )) : ''}
+                            </select >
+                        </div>
+                        <div className='choice-container'>
+                            <label>Escolha o mês:</label>
+                            <select
+                                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => { getExpensesByMonth(e.target.value) }}
                             >
-                                {option.expense_month}
-                            </option>
-                        )) : ''}
-                    </select >
+                                <option value="">Selecione...</option>
+                                {expenseMonths ? expenseMonths.map((option: any, index: any) => (
+                                    <option
+                                        key={index}
+                                        value={option.expense_month}
+                                    >
+                                        {option.expense_month}
+                                    </option>
+                                )) : ''}
+                            </select >
+                        </div>
+                    </div>
+                    <div className="tables-container">
+                        <table>
+                            {homeExpenses.length ?
+                                <thead>
+                                    <h2>Habitação</h2>
+                                    <tr>
+                                        <th>Tipo</th>
+                                        <th>Valor</th>
+                                    </tr>
+                                </thead>
+                                : ''
+                            }
+                            {homeExpenses ? homeExpenses.map((expense: any, index) => (
+                                <tbody>
+                                    <tr>
+                                        <td key={index}>{expense.expense_type}</td>
+                                        <td>R${' '} {expense.expense_amount
+                                            .replace('.', ',')
+                                            .replace(moneyRegex, '$&.')}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            )) : ''}
+                        </table>
+                        <table>
+                            {healthExpenses.length ?
+                                <thead>
+                                    <h2>Saúde</h2>
+                                    <tr>
+                                        <th>Tipo</th>
+                                        <th>Valor</th>
+                                    </tr>
+                                </thead>
+                                : ''
+                            }
+                            {healthExpenses ? healthExpenses.map((expense: any, index) => (
+                                <tbody>
+                                    <tr>
+                                        <td key={index}>{expense.expense_type}</td>
+                                        <td>R${' '} {expense.expense_amount
+                                            .replace('.', ',')
+                                            .replace(moneyRegex, '$&.')}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            )) : ''}
+                        </table>
+                        <table>
+                            {transportationExpenses.length ?
+                                <thead>
+                                    <h2>Transporte</h2>
+                                    <tr>
+                                        <th>Tipo</th>
+                                        <th>Valor</th>
+                                    </tr>
+                                </thead>
+                                : ''
+                            }
+                            {transportationExpenses ? transportationExpenses.map((expense: any, index) => (
+                                <tbody>
+                                    <tr>
+                                        <td key={index}>{expense.expense_type}</td>
+                                        <td>R${' '} {expense.expense_amount
+                                            .replace('.', ',')
+                                            .replace(moneyRegex, '$&.')}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            )) : ''}
+                        </table>
+                        <table>
+                            {vehicleExpenses.length ?
+                                <thead>
+                                    <h2>Automóvel</h2>
+                                    <tr>
+                                        <th>Tipo</th>
+                                        <th>Valor</th>
+                                    </tr>
+                                </thead>
+                                : ''
+                            }
+                            {vehicleExpenses ? vehicleExpenses.map((expense: any, index) => (
+                                <tbody>
+                                    <tr>
+                                        <td key={index}>{expense.expense_type}</td>
+                                        <td>R${' '} {expense.expense_amount
+                                            .replace('.', ',')
+                                            .replace(moneyRegex, '$&.')}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            )) : ''}
+                        </table>
+                        <table>
+                            {personalExpenses.length ?
+                                <thead>
+                                    <h2>Despesas pessoais</h2>
+                                    <tr>
+                                        <th>Tipo</th>
+                                        <th>Valor</th>
+                                    </tr>
+                                </thead>
+                                : ''
+                            }
+                            {personalExpenses ? personalExpenses.map((expense: any, index) => (
+                                <tbody>
+                                    <tr>
+                                        <td key={index}>{expense.expense_type}</td>
+                                        <td>R${' '} {expense.expense_amount
+                                            .replace('.', ',')
+                                            .replace(moneyRegex, '$&.')}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            )) : ''}
+                        </table>
+                        <table>
+                            {leisureExpenses.length ?
+                                <thead>
+                                    <h2>Lazer</h2>
+                                    <tr>
+                                        <th>Tipo</th>
+                                        <th>Valor</th>
+                                    </tr>
+                                </thead>
+                                : ''
+                            }
+                            {leisureExpenses ? leisureExpenses.map((expense: any, index) => (
+                                <tbody>
+                                    <tr>
+                                        <td key={index}>{expense.expense_type}</td>
+                                        <td>R${' '} {expense.expense_amount
+                                            .replace('.', ',')
+                                            .replace(moneyRegex, '$&.')}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            )) : ''}
+                        </table>
+                        <table>
+                            {educationExpenses.length ?
+                                <thead>
+                                    <h2>Educação</h2>
+                                    <tr>
+                                        <th>Tipo</th>
+                                        <th>Valor</th>
+                                    </tr>
+                                </thead>
+                                : ''
+                            }
+                            {educationExpenses ? educationExpenses.map((expense: any, index) => (
+                                <tbody>
+                                    <tr>
+                                        <td key={index}>{expense.expense_type}</td>
+                                        <td>R${' '} {expense.expense_amount
+                                            .replace('.', ',')
+                                            .replace(moneyRegex, '$&.')}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            )) : ''}
+                        </table>
+                        <table>
+                            {dependentsExpenses.length ?
+                                <thead>
+                                    <h2>Dependentes</h2>
+                                    <tr>
+                                        <th>Tipo</th>
+                                        <th>Valor</th>
+                                    </tr>
+                                </thead>
+                                : ''
+                            }
+                            {dependentsExpenses ? dependentsExpenses.map((expense: any, index) => (
+                                <tbody>
+                                    <tr>
+                                        <td key={index}>{expense.expense_type}</td>
+                                        <td>R${' '} {expense.expense_amount
+                                            .replace('.', ',')
+                                            .replace(moneyRegex, '$&.')}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            )) : ''}
+                        </table>
+                    </div>
                 </div>
-                <table>
-                    {homeExpenses.length ?
-                        <>
-                            <h2>Habitação</h2>
-                            <thead>
-                                <tr>
-                                    <th>Tipo</th>
-                                    <th>Valor</th>
-                                </tr>
-                            </thead>
-                        </>
-                        : ''
-                    }
-                    {homeExpenses ? homeExpenses.map((expense: any, index) => (
-                        <tr>
-                            <td key={index}>{expense.expense_type}</td>
-                            <td>R${' '} {expense.expense_amount
-                                .replace('.', ',')
-                                .replace(moneyRegex, '$&.')}
-                            </td>
-                        </tr>
-                    )) : ''}
-                </table>
-                <table>
-                    {healthExpenses.length ?
-                        <>
-                            <h2>Saúde</h2>
-                            <thead>
-                                <tr>
-                                    <th>Tipo</th>
-                                    <th>Valor</th>
-                                </tr>
-                            </thead>
-                        </>
-                        : ''
-                    }
-                    {healthExpenses ? healthExpenses.map((expense: any, index) => (
-                        <tr>
-                            <td key={index}>{expense.expense_type}</td>
-                            <td>R${' '} {expense.expense_amount
-                                .replace('.', ',')
-                                .replace(moneyRegex, '$&.')}
-                            </td>
-                        </tr>
-                    )) : ''}
-                </table>
-                <table>
-                    {transportationExpenses.length ?
-                        <>
-                            <h2>Transporte</h2>
-                            <thead>
-                                <tr>
-                                    <th>Tipo</th>
-                                    <th>Valor</th>
-                                </tr>
-                            </thead>
-                        </>
-                        : ''
-                    }
-                    {transportationExpenses ? transportationExpenses.map((expense: any, index) => (
-                        <tr>
-                            <td key={index}>{expense.expense_type}</td>
-                            <td>R${' '} {expense.expense_amount
-                                .replace('.', ',')
-                                .replace(moneyRegex, '$&.')}
-                            </td>
-                        </tr>
-                    )) : ''}
-                </table>
-                <table>
-                    {vehicleExpenses.length ?
-                        <>
-                            <h2>Automóvel</h2>
-                            <thead>
-                                <tr>
-                                    <th>Tipo</th>
-                                    <th>Valor</th>
-                                </tr>
-                            </thead>
-                        </>
-                        : ''
-                    }
-                    {vehicleExpenses ? vehicleExpenses.map((expense: any, index) => (
-                        <tr>
-                            <td key={index}>{expense.expense_type}</td>
-                            <td>R${' '} {expense.expense_amount
-                                .replace('.', ',')
-                                .replace(moneyRegex, '$&.')}
-                            </td>
-                        </tr>
-                    )) : ''}
-                </table>
-                <table>
-                    {personalExpenses.length ?
-                        <>
-                            <h2>Despesas pessoais</h2>
-                            <thead>
-                                <tr>
-                                    <th>Tipo</th>
-                                    <th>Valor</th>
-                                </tr>
-                            </thead>
-                        </>
-                        : ''
-                    }
-                    {personalExpenses ? personalExpenses.map((expense: any, index) => (
-                        <tr>
-                            <td key={index}>{expense.expense_type}</td>
-                            <td>R${' '} {expense.expense_amount
-                                .replace('.', ',')
-                                .replace(moneyRegex, '$&.')}
-                            </td>
-                        </tr>
-                    )) : ''}
-                </table>
-                <table>
-                    {leisureExpenses.length ?
-                        <>
-                            <h2>Lazer</h2>
-                            <thead>
-                                <tr>
-                                    <th>Tipo</th>
-                                    <th>Valor</th>
-                                </tr>
-                            </thead>
-                        </>
-                        : ''
-                    }
-                    {leisureExpenses ? leisureExpenses.map((expense: any, index) => (
-                        <tr>
-                            <td key={index}>{expense.expense_type}</td>
-                            <td>R${' '} {expense.expense_amount
-                                .replace('.', ',')
-                                .replace(moneyRegex, '$&.')}
-                            </td>
-                        </tr>
-                    )) : ''}
-                </table>
-                <table>
-                    {educationExpenses.length ?
-                        <>
-                            <h2>Educação</h2>
-                            <thead>
-                                <tr>
-                                    <th>Tipo</th>
-                                    <th>Valor</th>
-                                </tr>
-                            </thead>
-                        </>
-                        : ''
-                    }
-                    {educationExpenses ? educationExpenses.map((expense: any, index) => (
-                        <tr>
-                            <td key={index}>{expense.expense_type}</td>
-                            <td>R${' '} {expense.expense_amount
-                                .replace('.', ',')
-                                .replace(moneyRegex, '$&.')}
-                            </td>
-                        </tr>
-                    )) : ''}
-                </table>
-                <table>
-                    {dependentsExpenses.length ?
-                        <>
-                            <h2>Dependentes</h2>
-                            <thead>
-                                <tr>
-                                    <th>Tipo</th>
-                                    <th>Valor</th>
-                                </tr>
-                            </thead>
-                        </>
-                        : ''
-                    }
-                    {dependentsExpenses ? dependentsExpenses.map((expense: any, index) => (
-                        <tr>
-                            <td key={index}>{expense.expense_type}</td>
-                            <td>R${' '} {expense.expense_amount
-                                .replace('.', ',')
-                                .replace(moneyRegex, '$&.')}
-                            </td>
-                        </tr>
-                    )) : ''}
-                </table>
             </div>
         </>
     )

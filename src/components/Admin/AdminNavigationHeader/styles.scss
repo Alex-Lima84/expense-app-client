@@ -5,10 +5,11 @@
     .options-container {
         display: flex;
         flex-direction: column;
-        margin: 40px 0;
+        margin: 40px 20px;
+        min-width: 160px;
 
         a {
-            margin: 2px 20px;
+            margin: 2px 0;
             padding: 5px 10px;
             text-decoration: none;
             border: 1px solid #7c7c7c;

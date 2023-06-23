@@ -219,8 +219,7 @@ const ModifyExpense = () => {
         if (expenseTypeName === '' || formattedAmount === '' || expenseCategoryName === '' || expenseDate === '') {
             setError('Por favor, preencha todas as informações.')
             return
-        }
-        console.log(expenseDate)
+        }      
 
         if (expenseTypeName === expenseData[0].expense_type &&
             expenseAmount === expenseData[0].expense_amount &&

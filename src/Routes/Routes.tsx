@@ -1,13 +1,13 @@
 import { Route, Routes, BrowserRouter, Navigate } from 'react-router-dom';
 import Login from '../components/Login/Login';
 import Signin from '../components/Signin/Signin';
-import AdminHome from '../components/Admin/AdminHome/AdminHome';
-import Home from '../components/Home/Home';
-import ModifyExpense from '../components/Admin/ModifyExpense/ModifyExpense';
-import ModifyIncome from '../components/Admin/ModifyIncome/ModifyIncome';
-import ExpenseEntry from '../components/Admin/ExpenseEntry/ExpenseEntry';
-import IncomeEntry from '../components/Admin/IncomeEntry/IncomeEntry';
-import ShowAllExpenses from '../components/Admin/ShowAllExpenses/ShowAllExpenses';
+import AdminHome from '../pages/Admin/AdminHome/AdminHome';
+import Home from '../pages/Home/Home';
+import ModifyExpense from '../pages/Admin/ModifyExpense/ModifyExpense';
+import ModifyIncome from '../pages/Admin/ModifyIncome/ModifyIncome';
+import ExpenseEntry from '../pages/Admin/ExpenseEntry/ExpenseEntry';
+import IncomeEntry from '../pages/Admin/IncomeEntry/IncomeEntry';
+import ShowAll from '../pages/Admin/ShowAll/ShowAll';
 import { useSelector } from 'react-redux';
 import { selectUser } from '../redux/userSlice';
 
@@ -27,7 +27,7 @@ const AppRoutes = () => {
             <Route path="/admin/income-entry" element={<IncomeEntry />} />
             <Route path="/admin/modify-expense" element={<ModifyExpense />} />
             <Route path="/admin/modify-income" element={<ModifyIncome />} />
-            <Route path="/admin/show-expenses" element={<ShowAllExpenses />} />
+            <Route path="/admin/show-expenses" element={<ShowAll />} />
           </>
         ) : (
           <Route path="/admin/*" element={<Navigate to="/" replace />} />

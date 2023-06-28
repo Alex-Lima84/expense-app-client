@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react'
 import { useCookies } from 'react-cookie'
 import { toast } from "react-toastify";
 import './styles.scss'
-import AdminHeader from '../AdminHeader/AdminHeader'
-import AdminNavigationHeader from '../AdminNavigationHeader/AdminNavigationHeader'
+import AdminHeader from '../../../components/Admin/AdminHeader/AdminHeader'
+import AdminNavigationHeader from '../../../components/Admin/AdminNavigationHeader/AdminNavigationHeader'
 import CurrencyInput from 'react-currency-input-field';
 interface emailInterface {
     user_email: string,

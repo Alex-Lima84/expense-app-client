@@ -1,6 +1,6 @@
 import './styles.scss'
-import AdminHeader from '../AdminHeader/AdminHeader';
-import AdminNavigationHeader from '../AdminNavigationHeader/AdminNavigationHeader';
+import AdminHeader from '../../../components/Admin/AdminHeader/AdminHeader';
+import AdminNavigationHeader from '../../../components/Admin/AdminNavigationHeader/AdminNavigationHeader';
 import { useEffect, useState } from 'react';
 import { useCookies } from 'react-cookie';
 import { toast } from 'react-toastify';

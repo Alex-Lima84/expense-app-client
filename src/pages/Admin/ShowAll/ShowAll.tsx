@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie"
-import AdminHeader from "../AdminHeader/AdminHeader";
-import AdminNavigationHeader from "../AdminNavigationHeader/AdminNavigationHeader";
+import AdminHeader from "../../../components/Admin/AdminHeader/AdminHeader";
+import AdminNavigationHeader from "../../../components/Admin/AdminNavigationHeader/AdminNavigationHeader";
 import './styles.scss'
 
 interface showExpensesInterface {
@@ -18,7 +18,7 @@ interface showExpensesInterface {
     updated_at: string
 }
 
-const ShowAllExpenses = () => {
+const ShowAll = () => {
     const [cookies, ,] = useCookies<any>(undefined)
     const [listOfExpenseYear, setListOfExpenseYear] = useState<showExpensesInterface>()
     const [expenseMonths, setExpenseMonths] = useState<any>([])
@@ -440,4 +440,4 @@ const ShowAllExpenses = () => {
     )
 }
 
-export default ShowAllExpenses
+export default ShowAll

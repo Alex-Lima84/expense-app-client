@@ -26,6 +26,8 @@ const ShowAll = () => {
     const [currentExpenseYear, setCurrentExpenseYear] = useState<string>('')
     const [expensesByMonth, setExpensesByMonth] = useState<any>()
     const [formattedExpenses, setFormattedExpenses] = useState<any>()
+    const [expensesSum, setExpensesSum] = useState<string[]>([])
+    const [allExpensesSum, setAllExpensesSum] = useState<string>('')
     const [homeExpenses, setHomeExpenses] = useState<string[]>([]);
     const [transportationExpenses, setTransportationExpenses] = useState<string[]>([]);
     const [vehicleExpenses, setVehicleExpenses] = useState<string[]>([]);
@@ -116,6 +118,19 @@ const ShowAll = () => {
         }
     }
 
+    const setAllEmpty = () => {
+        setHomeExpenses([]);
+        setTransportationExpenses([]);
+        setVehicleExpenses([]);
+        setHealthExpenses([]);
+        setPersonalExpenses([]);
+        setLeisureExpenses([]);
+        setDependentsExpenses([]);
+        setDependentsExpenses([]);
+        setExpensesSum([])
+        setAllExpensesSum('')
+    }
+
     useEffect(() => {
 
         if (!expenseMonths) {
@@ -123,6 +138,8 @@ const ShowAll = () => {
         }
 
         if (expensesByMonth) {
+
+            setAllEmpty()
 
             const classifiedExpenses = expensesByMonth.reduce((acc: { expense_category: any; expenses: any[]; }[], expense: { expense_category: any; }) => {
                 const { expense_category } = expense;
@@ -168,17 +185,19 @@ const ShowAll = () => {
     }, [expensesByMonth])
 
     useEffect(() => {
-
         if (!formattedExpenses) {
-            return
+            return;
         }
 
         if (formattedExpenses) {
-            formattedExpenses.forEach((item: { expense_category: string; expenses: []; }) => {
+            formattedExpenses.forEach((item: { expense_category?: string; expenses?: any; }) => {
+                const { expenses } = item;
 
-                const { expense_category, expenses } = item;
+                if (expenses && expenses.length > 0 && expenses[0].expense_amount) {
+                    expensesSum.push(expenses[0].expense_amount);
+                }
 
-                switch (expense_category) {
+                switch (item.expense_category) {
                     case "Habitação":
                         setHomeExpenses(expenses);
                         break;
@@ -206,7 +225,11 @@ const ShowAll = () => {
                 }
             });
         }
-    }, [formattedExpenses])
+        const totalSum = expensesSum.reduce((sum, amount) => sum + parseFloat(amount), 0);
+
+        setAllExpensesSum(totalSum.toString())
+
+    }, [formattedExpenses]);
 
     return (
         <>

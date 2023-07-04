@@ -104,6 +104,7 @@ const ModifyExpense = () => {
                 }
             })
             const data = await response.json()
+            
             setExpenseData(data)
             setId(expenseId)
             setExpenseAmount(data[0].expense_amount)

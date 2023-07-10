@@ -18,7 +18,7 @@ interface showExpensesInterface {
     updated_at: string
 }
 
-const ShowAll = () => {
+const ShowExpenses = () => {
     const [cookies, ,] = useCookies<any>(undefined)
     const [listOfExpenseYear, setListOfExpenseYear] = useState<showExpensesInterface>()
     const [expenseMonths, setExpenseMonths] = useState<any>([])
@@ -40,7 +40,20 @@ const ShowAll = () => {
     const authToken = cookies.AuthToken
     const moneyRegex = /\d(?=(\d{3})+,)/g;
 
-    const getListOfYears = async () => {
+    const setAllEmpty = () => {
+        setHomeExpenses([]);
+        setTransportationExpenses([]);
+        setVehicleExpenses([]);
+        setHealthExpenses([]);
+        setPersonalExpenses([]);
+        setLeisureExpenses([]);
+        setDependentsExpenses([]);
+        setDependentsExpenses([]);
+        setExpensesSum([])
+        setAllExpensesSum('')
+    }
+
+    const getListOfExpenseYears = async () => {
 
         try {
 
@@ -59,7 +72,7 @@ const ShowAll = () => {
     }
 
     useEffect(() => {
-        getListOfYears()
+        getListOfExpenseYears()
     }, [])
 
 
@@ -118,22 +131,8 @@ const ShowAll = () => {
         }
     }
 
-    const setAllEmpty = () => {
-        setHomeExpenses([]);
-        setTransportationExpenses([]);
-        setVehicleExpenses([]);
-        setHealthExpenses([]);
-        setPersonalExpenses([]);
-        setLeisureExpenses([]);
-        setDependentsExpenses([]);
-        setDependentsExpenses([]);
-        setExpensesSum([])
-        setAllExpensesSum('')
-    }
-
-    useEffect(() => {
-
-        if (!expenseMonths) {
+    const checkExpensesByMonth = () => {
+        if (!expensesByMonth) {
             return
         }
 
@@ -141,7 +140,7 @@ const ShowAll = () => {
 
             setAllEmpty()
 
-            const classifiedExpenses = expensesByMonth.reduce((acc: { expense_category: any; expenses: any[]; }[], expense: { expense_category: any; }) => {
+            const organizedExpenses = expensesByMonth.reduce((acc: { expense_category: string; expenses: any[]; }[], expense: { expense_category: string; }) => {
                 const { expense_category } = expense;
 
                 const existingCategory = acc.find((item: { expense_category: any; }) => item.expense_category === expense_category);
@@ -155,7 +154,7 @@ const ShowAll = () => {
                 return acc;
             }, []);
 
-            const summedExpenses = classifiedExpenses.map((category: { expenses: any[]; expense_category: any; }) => {
+            const summedExpenses = organizedExpenses.map((category: { expenses: any[]; expense_category: any; }) => {
                 const expenseMap = new Map<string, number>();
 
                 category.expenses.forEach((expense: { expense_amount: string; expense_type: string; }) => {
@@ -181,55 +180,62 @@ const ShowAll = () => {
 
             setFormattedExpenses(summedExpenses);
         }
-
-    }, [expensesByMonth])
+    }
 
     useEffect(() => {
+        checkExpensesByMonth()
+    }, [expensesByMonth])
+
+    const checkFormattedExpenses = () => {
         if (!formattedExpenses) {
             return;
         }
 
-        if (formattedExpenses) {
-            formattedExpenses.forEach((item: { expense_category?: string; expenses?: any; }) => {
-                const { expenses } = item;
+        formattedExpenses.forEach((item: { expense_category?: string; expenses?: any; }) => {
+            const { expenses } = item;
 
-                if (expenses && expenses.length > 0 && expenses[0].expense_amount) {
-                    expensesSum.push(expenses[0].expense_amount);
-                }
+            if (expenses && expenses.length > 0 && expenses[0].expense_amount) {
+                expensesSum.push(expenses[0].expense_amount);
+            }
 
-                switch (item.expense_category) {
-                    case "Habitação":
-                        setHomeExpenses(expenses);
-                        break;
-                    case "Transporte":
-                        setTransportationExpenses(expenses);
-                        break;
-                    case "Automóvel":
-                        setVehicleExpenses(expenses);
-                        break;
-                    case "Saúde":
-                        setHealthExpenses(expenses);
-                        break;
-                    case "Despesas pessoais":
-                        setPersonalExpenses(expenses);
-                        break;
-                    case "Lazer":
-                        setLeisureExpenses(expenses);
-                        break;
-                    case "Educação":
-                        setDependentsExpenses(expenses);
-                        break;
-                    case "Dependentes":
-                        setDependentsExpenses(expenses);
-                        break;
-                }
-            });
-        }
-        const totalSum = expensesSum.reduce((sum, amount) => sum + parseFloat(amount), 0);
+            switch (item.expense_category) {
+                case "Habitação":
+                    setHomeExpenses(expenses);
+                    break;
+                case "Transporte":
+                    setTransportationExpenses(expenses);
+                    break;
+                case "Automóvel":
+                    setVehicleExpenses(expenses);
+                    break;
+                case "Saúde":
+                    setHealthExpenses(expenses);
+                    break;
+                case "Despesas pessoais":
+                    setPersonalExpenses(expenses);
+                    break;
+                case "Lazer":
+                    setLeisureExpenses(expenses);
+                    break;
+                case "Educação":
+                    setDependentsExpenses(expenses);
+                    break;
+                case "Dependentes":
+                    setDependentsExpenses(expenses);
+                    break;
+            }
+        });
 
-        setAllExpensesSum(totalSum.toString())
+        const totalSum = expensesSum.reduce((sum, amount) => sum + parseFloat(amount), 0).toFixed(2);
+        setAllExpensesSum(totalSum);
+    }
+    console.log(formattedExpenses)
 
+    useEffect(() => {
+        checkFormattedExpenses()
     }, [formattedExpenses]);
+
+    console.log(expensesByMonth)
 
     return (
         <>
@@ -239,6 +245,7 @@ const ShowAll = () => {
                 <div className="outter-container">
                     <div className="choices-container">
                         <div className='choice-container'>
+                            <h1>Visualizar despesas</h1>
                             <label>Escolha o ano:</label>
                             <select
                                 onChange={(e: React.ChangeEvent<HTMLSelectElement>) => { getExpenseMonths(e.target.value) }}
@@ -457,10 +464,19 @@ const ShowAll = () => {
                             )) : ''}
                         </table>
                     </div>
+                    {allExpensesSum ?
+                        <div className="total-value">
+                            <h3>Valor total:</h3>
+                            <p>R${' '} {allExpensesSum
+                                .replace('.', ',')
+                                .replace(moneyRegex, '$&.')}
+                            </p>
+                        </div>
+                        : ''}
                 </div>
             </div>
         </>
     )
 }
 
-export default ShowAll
+export default ShowExpenses

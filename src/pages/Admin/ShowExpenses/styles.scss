@@ -11,12 +11,18 @@
         .choices-container {
             display: flex;
             flex-direction: column;
-
-            align-items: center;
+            align-items: center;          
             margin: 0px;
 
-            .choice-container {                           
-                margin: 5px;
+            .choice-container {
+                margin: 0 5px;
+
+                h1 {
+                    font-size: 20px;
+                    text-align: center;
+                    margin-top: -5px;
+                    margin-bottom: 40px;
+                }
 
                 label {
                     margin-right: 5px;
@@ -33,7 +39,7 @@
             margin-top: 20px;
 
             table {
-                
+
                 border-spacing: 5px;
 
                 thead {
@@ -41,7 +47,7 @@
                     h2 {
                         padding-bottom: 2px;
                         border-bottom: 1px solid #000;
-                      
+
                     }
 
                     tr {
@@ -54,19 +60,34 @@
 
                 tbody {
 
-                    tr {                        
+                    tr {
                         margin: 2px 0;
                         outline: 1px solid #000;
                         border-radius: 5px;
                         padding: 10px;
 
-                        td {                            
+                        td {
                             text-align: center;
                         }
                     }
                 }
 
 
+            }
+        }
+
+        .total-value {
+            display: flex;
+            align-items: center;
+
+            h3 {
+                margin-right: 10px;
+                font-size: 20px;
+            }
+
+            p {
+                margin-left: 10px;
+                font-size: 20px;
             }
         }
     }

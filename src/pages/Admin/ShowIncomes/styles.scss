@@ -1,0 +1,95 @@
+.show-all-expenses-container {
+    display: flex;
+
+    .outter-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        margin-top: 40px;
+
+        .choices-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0px;
+
+            .choice-container {
+                margin: 0 5px;
+
+                h1 {
+                    font-size: 20px;
+                    text-align: center;
+                    margin-top: -5px;
+                    margin-bottom: 40px;
+                }
+
+                label {
+                    margin-right: 5px;
+                    min-width: 110px;
+                }
+
+                select {
+                    min-width: 90px;
+                }
+            }
+        }
+
+        .tables-container {
+            margin-top: 20px;
+
+            table {
+
+                border-spacing: 5px;
+
+                thead {
+
+                    h2 {
+                        padding-bottom: 2px;
+                        border-bottom: 1px solid #000;
+
+                    }
+
+                    tr {
+                        th {
+                            width: 240px;
+                        }
+                    }
+
+                }
+
+                tbody {
+
+                    tr {
+                        margin: 2px 0;
+                        outline: 1px solid #000;
+                        border-radius: 5px;
+                        padding: 10px;
+
+                        td {
+                            text-align: center;
+                        }
+                    }
+                }
+
+
+            }
+        }
+
+        .total-value {
+            display: flex;
+            align-items: center;
+
+            h3 {
+                margin-right: 10px;
+                font-size: 20px;
+            }
+
+            p {
+                margin-left: 10px;
+                font-size: 20px;
+            }
+        }
+    }
+
+}

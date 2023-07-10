@@ -163,8 +163,7 @@ const ModifyIncome = () => {
 
     const updateincome = async (e: any) => {
         e.preventDefault()
-        const formattedAmount = incomeAmount.replace(',', '.').replace(moneyRegex, '$&.')
-        console.log(formattedAmount)
+        const formattedAmount = incomeAmount.replace(',', '.').replace(moneyRegex, '$&.')       
         const incomeDataDate = incomeData[0].income_date.slice(0, 10)
 
         if (incomeTypeName === '' || formattedAmount === '' || incomeDate === '') {
@@ -258,7 +257,7 @@ const ModifyIncome = () => {
             <div className='modify-income-container'>
                 <AdminNavigationHeader />
                 <div className='modify-income-table-container'>
-                    <h2>Abaixo estão listadas as 10 últimas despesas lançadas</h2>
+                    <h2>Abaixo estão listadas as 10 últimas receitas lançadas</h2>
                     <table className='incomes-list-table'>
                         <thead>
                             <tr>

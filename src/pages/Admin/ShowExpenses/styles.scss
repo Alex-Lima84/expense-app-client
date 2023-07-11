@@ -11,7 +11,7 @@
         .choices-container {
             display: flex;
             flex-direction: column;
-            align-items: center;          
+            align-items: center;
             margin: 0px;
 
             .choice-container {
@@ -21,11 +21,15 @@
                     font-size: 20px;
                     text-align: center;
                     margin-top: -5px;
-                    margin-bottom: 40px;
+                    margin-bottom: 20px;
+                }
+
+                label:first-child {
+                    margin-right: 4px;
                 }
 
                 label {
-                    margin-right: 5px;
+                    margin-right: 6px;
                     min-width: 110px;
                 }
 
@@ -47,7 +51,7 @@
                     h2 {
                         padding-bottom: 2px;
                         border-bottom: 1px solid #000;
-
+                        margin-bottom: 10px;
                     }
 
                     tr {
@@ -55,7 +59,6 @@
                             width: 240px;
                         }
                     }
-
                 }
 
                 tbody {
@@ -71,14 +74,13 @@
                         }
                     }
                 }
-
-
             }
         }
 
         .total-value {
             display: flex;
             align-items: center;
+            margin-top: 20px;
 
             h3 {
                 margin-right: 10px;

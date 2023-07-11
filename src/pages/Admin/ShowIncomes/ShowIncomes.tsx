@@ -17,11 +17,10 @@ interface showExpensesInterface {
     created_at: string,
     updated_at: string
 }
-
-interface Income {
+interface IncomeInterface {
     income_type: string;
     income_amount: string;
-  }
+}
 
 const ShowIncomes = () => {
     const [cookies, ,] = useCookies<any>(undefined)
@@ -87,16 +86,15 @@ const ShowIncomes = () => {
             return
         }
 
-        if (listOfIncomeYear) {
-            let incomeYearArray: string[] = []
-            listOfIncomeYear.forEach((expense: any) => {
-                incomeYearArray.push(expense.income_year)
-            });
-            incomeYearArray = Array.from(new Set(incomeYearArray));
-            incomeYearArray.sort((a, b) => a.localeCompare(b));
+        let incomeYearArray: string[] = []
+        listOfIncomeYear.forEach((expense: any) => {
+            incomeYearArray.push(expense.income_year)
+        });
+        incomeYearArray = Array.from(new Set(incomeYearArray));
+        incomeYearArray.sort((a, b) => a.localeCompare(b));
 
-            setIncomeYears(incomeYearArray)
-        }
+        setIncomeYears(incomeYearArray)
+
 
     }, [listOfIncomeYear])
 
@@ -141,82 +139,74 @@ const ShowIncomes = () => {
             return
         }
 
-        if (incomesByMonth) {
+        setAllEmpty()
 
-            setAllEmpty()
+        const organizedIncomes = incomesByMonth.reduce((acc: IncomeInterface[], income: IncomeInterface) => {
+            const { income_type, income_amount } = income;
 
-            const organizedIncomes = incomesByMonth.reduce((acc: { income_type: string; income_amount: string; }[], income: { income_type: string; income_amount: string; }) => {
-                const { income_type, income_amount } = income;
+            const existingCategory = acc.find((item: { income_type: string; }) => item.income_type === income_type);
 
-                const existingCategory = acc.find((item: { income_type: string; }) => item.income_type === income_type);
+            if (existingCategory) {
+                existingCategory.income_amount = (parseFloat(existingCategory.income_amount) + parseFloat(income_amount)).toFixed(2);
+            } else {
+                acc.push({ income_type, income_amount });
+            }
 
-                if (existingCategory) {
-                    existingCategory.income_amount = (parseFloat(existingCategory.income_amount) + parseFloat(income_amount)).toFixed(2);
-                } else {
-                    acc.push({ income_type, income_amount });
-                }
+            return acc;
+        }, []);
 
-                return acc;
-            }, []);
+        setFormattedIncomes(organizedIncomes);
 
-            setFormattedIncomes(organizedIncomes);
 
-        }
     }
 
     useEffect(() => {
         checkIncomesByMonth()
     }, [incomesByMonth])
 
-
-
     const checkFormattedIncomes = () => {
         if (!formattedIncomes) {
-          return;
+            return;
         }
-      
+
         formattedIncomes.forEach((item: { income_type?: string; income_amount?: string }) => {
-          const { income_amount, income_type } = item;
-      
-          if (income_amount) {
-            incomesSum.push(income_amount);
-          }
-      
-          switch (income_type) {
-            case "13° salário":
-              setThirteenthSalaryIncomes((prevIncomes) => [...prevIncomes, income_amount ?? '']);
-              break;
-            case "Férias":
-              setVacationIncomes((prevIncomes) => [...prevIncomes, income_amount ?? '']);
-              break;
-            case "Investimentos":
-              setInvestmentsIncomes((prevIncomes) => [...prevIncomes, income_amount ?? '']);
-              break;
-            case "Outros":
-              setOthersIncomes((prevIncomes) => [...prevIncomes, income_amount ?? '']);
-              break;
-            case "Poupança":
-              setSavingsIncomes((prevIncomes) => [...prevIncomes, income_amount ?? '']);
-              break;
-            case "Restituição IR":
-              setIrIncomes((prevIncomes) => [...prevIncomes, income_amount ?? '']);
-              break;
-            case "Salário":
-              setSalaryIncomes((prevIncomes) => [...prevIncomes, income_amount ?? '']);
-              break;
-            case "Sobras / Mês passado":
-              setLastMonthProfit((prevIncomes) => [...prevIncomes, income_amount ?? '']);
-              break;           
-          }
+            const { income_amount, income_type } = item;
+
+            if (income_amount) {
+                incomesSum.push(income_amount);
+            }
+
+            switch (income_type) {
+                case "13° salário":
+                    setThirteenthSalaryIncomes((prevIncomes) => [...prevIncomes, income_amount ?? '']);
+                    break;
+                case "Férias":
+                    setVacationIncomes((prevIncomes) => [...prevIncomes, income_amount ?? '']);
+                    break;
+                case "Investimentos":
+                    setInvestmentsIncomes((prevIncomes) => [...prevIncomes, income_amount ?? '']);
+                    break;
+                case "Outros":
+                    setOthersIncomes((prevIncomes) => [...prevIncomes, income_amount ?? '']);
+                    break;
+                case "Poupança":
+                    setSavingsIncomes((prevIncomes) => [...prevIncomes, income_amount ?? '']);
+                    break;
+                case "Restituição IR":
+                    setIrIncomes((prevIncomes) => [...prevIncomes, income_amount ?? '']);
+                    break;
+                case "Salário":
+                    setSalaryIncomes((prevIncomes) => [...prevIncomes, income_amount ?? '']);
+                    break;
+                case "Sobras / Mês passado":
+                    setLastMonthProfit((prevIncomes) => [...prevIncomes, income_amount ?? '']);
+                    break;
+            }
         });
-      
+
         const totalSum = incomesSum.reduce((sum, amount) => sum + parseFloat(amount.replace(',', '.')), 0).toFixed(2);
         setAllIncomesSum(totalSum);
-      };
-      
-    console.log(formattedIncomes)
-    console.log(irIncomes)
-    console.log(allIncomesSum)
+    };
 
     useEffect(() => {
         checkFormattedIncomes()
@@ -263,192 +253,176 @@ const ShowIncomes = () => {
                             </select >
                         </div>
                     </div>
-                    {/* <div className="tables-container">
+                    <div className="tables-container">
                         <table>
-                            {homeExpenses.length ?
+                            {salaryIncomes.length ?
                                 <thead>
-                                    <h2>Habitação</h2>
+                                    <h2>Salário</h2>
                                     <tr>
-                                        <th>Tipo</th>
                                         <th>Valor</th>
                                     </tr>
                                 </thead>
                                 : ''
                             }
-                            {homeExpenses ? homeExpenses.map((expense: any, index) => (
+                            {salaryIncomes.length ?
                                 <tbody>
                                     <tr>
-                                        <td key={index}>{expense.expense_type}</td>
-                                        <td>R${' '} {expense.expense_amount
+                                        <td >{salaryIncomes[0]
                                             .replace('.', ',')
                                             .replace(moneyRegex, '$&.')}
                                         </td>
                                     </tr>
                                 </tbody>
-                            )) : ''}
+                                : ''}
                         </table>
                         <table>
-                            {healthExpenses.length ?
+                            {thirteenthSalaryIncomes.length ?
                                 <thead>
-                                    <h2>Saúde</h2>
+                                    <h2>13° Salário</h2>
                                     <tr>
-                                        <th>Tipo</th>
                                         <th>Valor</th>
                                     </tr>
                                 </thead>
                                 : ''
                             }
-                            {healthExpenses ? healthExpenses.map((expense: any, index) => (
+                            {thirteenthSalaryIncomes.length ?
                                 <tbody>
                                     <tr>
-                                        <td key={index}>{expense.expense_type}</td>
-                                        <td>R${' '} {expense.expense_amount
+                                        <td>{thirteenthSalaryIncomes[0]
                                             .replace('.', ',')
                                             .replace(moneyRegex, '$&.')}
                                         </td>
                                     </tr>
                                 </tbody>
-                            )) : ''}
+                                : ''}
                         </table>
                         <table>
-                            {transportationExpenses.length ?
+                            {vacationIncomes.length ?
                                 <thead>
-                                    <h2>Transporte</h2>
+                                    <h2>Férias</h2>
                                     <tr>
-                                        <th>Tipo</th>
                                         <th>Valor</th>
                                     </tr>
                                 </thead>
                                 : ''
                             }
-                            {transportationExpenses ? transportationExpenses.map((expense: any, index) => (
+                            {vacationIncomes.length ?
                                 <tbody>
                                     <tr>
-                                        <td key={index}>{expense.expense_type}</td>
-                                        <td>R${' '} {expense.expense_amount
+                                        <td>{vacationIncomes[0]
                                             .replace('.', ',')
                                             .replace(moneyRegex, '$&.')}
                                         </td>
                                     </tr>
                                 </tbody>
-                            )) : ''}
+                                : ''}
                         </table>
                         <table>
-                            {vehicleExpenses.length ?
+                            {investmentsIncomes.length ?
                                 <thead>
-                                    <h2>Automóvel</h2>
+                                    <h2>Investimentos</h2>
                                     <tr>
-                                        <th>Tipo</th>
                                         <th>Valor</th>
                                     </tr>
                                 </thead>
                                 : ''
                             }
-                            {vehicleExpenses ? vehicleExpenses.map((expense: any, index) => (
+                            {investmentsIncomes.length ?
                                 <tbody>
                                     <tr>
-                                        <td key={index}>{expense.expense_type}</td>
-                                        <td>R${' '} {expense.expense_amount
+                                        <td>{investmentsIncomes[0]
                                             .replace('.', ',')
                                             .replace(moneyRegex, '$&.')}
                                         </td>
                                     </tr>
                                 </tbody>
-                            )) : ''}
+                                : ''}
                         </table>
                         <table>
-                            {personalExpenses.length ?
+                            {savingsIncomes.length ?
                                 <thead>
-                                    <h2>Despesas pessoais</h2>
+                                    <h2>Poupança</h2>
                                     <tr>
-                                        <th>Tipo</th>
                                         <th>Valor</th>
                                     </tr>
                                 </thead>
                                 : ''
                             }
-                            {personalExpenses ? personalExpenses.map((expense: any, index) => (
+                            {savingsIncomes.length ?
                                 <tbody>
                                     <tr>
-                                        <td key={index}>{expense.expense_type}</td>
-                                        <td>R${' '} {expense.expense_amount
+                                        <td>{savingsIncomes[0]
                                             .replace('.', ',')
                                             .replace(moneyRegex, '$&.')}
                                         </td>
                                     </tr>
                                 </tbody>
-                            )) : ''}
+                                : ''}
                         </table>
                         <table>
-                            {leisureExpenses.length ?
+                            {irIncomes.length ?
                                 <thead>
-                                    <h2>Lazer</h2>
+                                    <h2>Restituição IR</h2>
                                     <tr>
-                                        <th>Tipo</th>
                                         <th>Valor</th>
                                     </tr>
                                 </thead>
                                 : ''
                             }
-                            {leisureExpenses ? leisureExpenses.map((expense: any, index) => (
+                            {irIncomes.length ?
                                 <tbody>
                                     <tr>
-                                        <td key={index}>{expense.expense_type}</td>
-                                        <td>R${' '} {expense.expense_amount
+                                        <td>{irIncomes[0]
                                             .replace('.', ',')
                                             .replace(moneyRegex, '$&.')}
                                         </td>
                                     </tr>
                                 </tbody>
-                            )) : ''}
+                                : ''}
                         </table>
                         <table>
-                            {educationExpenses.length ?
+                            {lastMonthProfit.length ?
                                 <thead>
-                                    <h2>Educação</h2>
+                                    <h2>Lucro / Mês passado</h2>
                                     <tr>
-                                        <th>Tipo</th>
                                         <th>Valor</th>
                                     </tr>
                                 </thead>
                                 : ''
                             }
-                            {educationExpenses ? educationExpenses.map((expense: any, index) => (
+                            {lastMonthProfit.length ?
                                 <tbody>
                                     <tr>
-                                        <td key={index}>{expense.expense_type}</td>
-                                        <td>R${' '} {expense.expense_amount
+                                        <td>{lastMonthProfit[0]
                                             .replace('.', ',')
                                             .replace(moneyRegex, '$&.')}
                                         </td>
                                     </tr>
                                 </tbody>
-                            )) : ''}
+                                : ''}
                         </table>
                         <table>
-                            {dependentsExpenses.length ?
+                            {othersIncomes.length ?
                                 <thead>
-                                    <h2>Dependentes</h2>
+                                    <h2>Outros</h2>
                                     <tr>
-                                        <th>Tipo</th>
                                         <th>Valor</th>
                                     </tr>
                                 </thead>
                                 : ''
                             }
-                            {dependentsExpenses ? dependentsExpenses.map((expense: any, index) => (
+                            {othersIncomes.length ?
                                 <tbody>
                                     <tr>
-                                        <td key={index}>{expense.expense_type}</td>
-                                        <td>R${' '} {expense.expense_amount
+                                        <td>{othersIncomes[0]
                                             .replace('.', ',')
                                             .replace(moneyRegex, '$&.')}
                                         </td>
                                     </tr>
                                 </tbody>
-                            )) : ''}
+                                : ''}
                         </table>
-                    </div> */}
+                    </div>
                     {allIncomesSum ?
                         <div className="total-value">
                             <h3>Valor total:</h3>

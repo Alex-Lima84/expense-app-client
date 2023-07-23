@@ -38,7 +38,7 @@ const ExpenseEntry = () => {
     const showExpenseCategory = async () => {
         try {
 
-            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/expense-categories`, {
+            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/expenses/categories`, {
                 headers: {
                     Authorization: authToken,
                 }
@@ -56,7 +56,7 @@ const ExpenseEntry = () => {
 
         try {
 
-            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/expense-types/${categoryId}`, {
+            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/expenses/types/${categoryId}`, {
                 headers: {
                     Authorization: authToken,
                 }

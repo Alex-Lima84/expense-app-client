@@ -55,8 +55,7 @@ const ExpenseEntry = () => {
         addCategoryName(categoryId)
 
         try {
-
-            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/expenses/types/${categoryId}`, {
+            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/expenses/types/${userEmail}/${categoryId}`, {
                 headers: {
                     Authorization: authToken,
                 }
@@ -134,9 +133,12 @@ const ExpenseEntry = () => {
         setDisplayMessage('Salvando dados...')
         try {
 
-            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/expense-entry`, {
+            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/expenses/expense-entry`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `${authToken}`,
+                },
                 body: JSON.stringify({
                     expenseTypeName,
                     expenseAmount: formattedAmount,
@@ -147,7 +149,8 @@ const ExpenseEntry = () => {
                     userEmail
                 })
             })
-            if (response.status === 200) {
+            console.log(response)
+            if (response.ok === true) {
                 setDisplayMessage('')
                 setExpenseAmount('')
                 setExpenseDate('')
@@ -164,7 +167,7 @@ const ExpenseEntry = () => {
                 toast.success("Despesa lançada! 😎");
             }
 
-            if (response.status !== 200) {
+            if (response.ok === false) {
                 toast.error("Houve um erro, tente novamente. 😐");
             }
 

@@ -98,13 +98,12 @@ const ModifyExpense = () => {
         showExpenseCategory()
 
         try {
-            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/expense/${userEmail}/${expenseId}`, {
+            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/expenses/${userEmail}/${expenseId}`, {
                 headers: {
                     Authorization: authToken,
                 }
             })
             const data = await response.json()
-            
             setExpenseData(data)
             setId(expenseId)
             setExpenseAmount(data[0].expense_amount)
@@ -159,7 +158,7 @@ const ModifyExpense = () => {
         addCategoryName(categoryId)
 
         try {
-            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/expenses/types/${categoryId}`, {
+            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/expenses/types/${userEmail}/${categoryId}`, {
                 headers: {
                     Authorization: authToken,
                 }

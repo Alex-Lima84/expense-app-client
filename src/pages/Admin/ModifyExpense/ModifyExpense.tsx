@@ -82,7 +82,7 @@ const ModifyExpense = () => {
                 }
             })
 
-            const data = await response.json()
+            const data = await response.json()            
             setShowExpenses(data)
 
         } catch (error) {
@@ -98,7 +98,7 @@ const ModifyExpense = () => {
         showExpenseCategory()
 
         try {
-            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/expenses/${userEmail}/${expenseId}`, {
+            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/expenses/expense/${userEmail}/${expenseId}`, {
                 headers: {
                     Authorization: authToken,
                 }
@@ -236,9 +236,12 @@ const ModifyExpense = () => {
         }
 
         try {
-            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/expense/${userEmail}/${id}`, {
+            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/expenses/expense/${userEmail}/${id}`, {
                 method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `${authToken}`,
+                },
                 body: JSON.stringify({
                     expenseTypeName,
                     expenseAmount: formattedAmount,
@@ -250,16 +253,16 @@ const ModifyExpense = () => {
                     id
                 })
             })
-            if (response.status === 200) {
-                toast.success("Despesa modificada! 😎");
-                setShowModal(false)
-                getExpenses()
-                setError('')
+
+            if (response.ok === false) {
+                toast.error("Houve um erro, tente novamente. 😐");
+                return
             }
 
-            if (response.status !== 200) {
-                toast.error("Houve um erro, tente novamente. 😐");
-            }
+            toast.success("Despesa modificada! 😎");
+            setShowModal(false)            
+            getExpenses()
+            setError('')
 
         } catch (error) {
             console.error(error)
@@ -289,7 +292,7 @@ const ModifyExpense = () => {
     const deleteExpense = async () => {
 
         try {
-            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/expense/${userEmail}/${id}`, {
+            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/expenses/expense/${userEmail}/${id}`, {
                 method: 'DELETE',
                 headers: { 'Content-Type': 'application/json' },
             })

@@ -149,27 +149,26 @@ const ExpenseEntry = () => {
                     userEmail
                 })
             })
-            console.log(response)
-            if (response.ok === true) {
-                setDisplayMessage('')
-                setExpenseAmount('')
-                setExpenseDate('')
-                setExpenseCategories([{
-                    expense_category: '',
-                    id: ''
-                }])
-                setExpenseTypes([{
-                    expense_category: '',
-                    expense_type: '',
-                    id: ''
-                }])
-                showExpenseCategory()
-                toast.success("Despesa lançada! 😎");
-            }
 
             if (response.ok === false) {
                 toast.error("Houve um erro, tente novamente. 😐");
+                return
             }
+
+            setDisplayMessage('')
+            setExpenseAmount('')
+            setExpenseDate('')
+            setExpenseCategories([{
+                expense_category: '',
+                id: ''
+            }])
+            setExpenseTypes([{
+                expense_category: '',
+                expense_type: '',
+                id: ''
+            }])
+            showExpenseCategory()
+            toast.success("Despesa lançada! 😎");
 
         } catch (error) {
             console.error(error)

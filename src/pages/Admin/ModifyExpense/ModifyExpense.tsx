@@ -82,7 +82,7 @@ const ModifyExpense = () => {
                 }
             })
 
-            const data = await response.json()            
+            const data = await response.json()
             setShowExpenses(data)
 
         } catch (error) {
@@ -260,7 +260,7 @@ const ModifyExpense = () => {
             }
 
             toast.success("Despesa modificada! 😎");
-            setShowModal(false)            
+            setShowModal(false)
             getExpenses()
             setError('')
 
@@ -294,18 +294,22 @@ const ModifyExpense = () => {
         try {
             const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/expenses/expense/${userEmail}/${id}`, {
                 method: 'DELETE',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `${authToken}`,
+                },
+
             })
-            if (response.status === 200) {
-                toast.success("Despesa excluída! 😎");
-                setShowDeleteModal(false)
-                getExpenses()
-                setError('')
+
+            if (response.ok === false) {
+                toast.error("Houve um erro, tente novamente. 😐");
+                return
             }
 
-            if (response.status !== 200) {
-                toast.error("Houve um erro, tente novamente. 😐");
-            }
+            toast.success("Despesa excluída! 😎");
+            setShowDeleteModal(false)
+            getExpenses()
+            setError('')
 
         } catch (error) {
             console.error(error)

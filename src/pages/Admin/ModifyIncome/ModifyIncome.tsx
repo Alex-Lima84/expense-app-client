@@ -92,7 +92,7 @@ const ModifyIncome = () => {
     const getIncomeInfo = async (incomeId: string) => {
 
         try {
-            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/income/${userEmail}/${incomeId}`, {
+            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/incomes/income/${userEmail}/${incomeId}`, {
                 headers: {
                     Authorization: authToken,
                 }
@@ -138,7 +138,7 @@ const ModifyIncome = () => {
     const getincomeTypes = async () => {
 
         try {
-            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/income-types`, {
+            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/incomes/income-types/${userEmail}`, {
                 headers: {
                     Authorization: authToken,
                 }

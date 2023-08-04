@@ -13,8 +13,7 @@ interface incomeTypesInterface {
     id: string
 }
 
-const IncomeEntry = ({ setShowModal,
-}: any) => {
+const IncomeEntry = () => {
     const [cookies, ,] = useCookies<string>(undefined)
     const [userEmail,] = useState<emailType>(cookies.Email)
     const [incomeTypes, setIncomeTypes] = useState<incomeTypesInterface[]>()

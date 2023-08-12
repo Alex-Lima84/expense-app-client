@@ -110,7 +110,7 @@ const ModifyIncome = () => {
             setIncomeDate(incomeDate)
             setIncomeMonth(dateMonth)
             setIncomeYear(dateYear)
-            
+
         } catch (error) {
             console.log(error)
         }
@@ -163,7 +163,7 @@ const ModifyIncome = () => {
 
     const updateincome = async (e: any) => {
         e.preventDefault()
-        const formattedAmount = incomeAmount.replace(',', '.').replace(moneyRegex, '$&.')       
+        const formattedAmount = incomeAmount.replace(',', '.').replace(moneyRegex, '$&.')
         const incomeDataDate = incomeData[0].income_date.slice(0, 10)
 
         if (incomeTypeName === '' || formattedAmount === '' || incomeDate === '') {
@@ -179,9 +179,12 @@ const ModifyIncome = () => {
         }
 
         try {
-            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/income/${userEmail}/${id}`, {
+            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/incomes/income/${userEmail}/${id}`, {
                 method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `${authToken}`,
+                },
                 body: JSON.stringify({
                     incomeTypeName,
                     incomeAmount: formattedAmount,
@@ -192,16 +195,17 @@ const ModifyIncome = () => {
                     id
                 })
             })
-            if (response.status === 200) {
-                toast.success("Receita excluída! 😎");
-                setShowModal(false)
-                getIncomes()
-                setError('')
+
+            if (response.ok === false) {
+                toast.error("Houve um erro, tente novamente. 😐");
+                return
             }
 
-            if (response.status !== 200) {
-                toast.error("Houve um erro, tente novamente. 😐");
-            }
+            toast.success("Receita modificada! 😎");
+            setShowModal(false)
+            getIncomes()
+            setError('')
+
 
         } catch (error) {
             console.error(error)

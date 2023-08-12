@@ -32,7 +32,7 @@ const IncomeEntry = () => {
 
         try {
 
-            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/income-types`, {
+            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/incomes/income-types/${userEmail}`, {
                 headers: {
                     Authorization: authToken,
                 }
@@ -79,9 +79,12 @@ const IncomeEntry = () => {
         setDisplayMessage('Salvando dados...')
         try {
 
-            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/income-entry`, {
+            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/incomes/income-entry`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `${authToken}`,
+                },
                 body: JSON.stringify({
                     incomeTypeName,
                     incomeAmount,
@@ -91,21 +94,21 @@ const IncomeEntry = () => {
                     userEmail
                 })
             })
-            if (response.status === 200) {
-                setDisplayMessage('')
-                setIncomeAmount('')
-                setIncomeDate('')
-                setIncomeTypes([{
-                    income_type: '',
-                    id: ''
-                }])
-                getIncomeTypes()
-                toast.success("Receita lançada! 😎");
+
+            if (response.ok === false) {
+                toast.error("Houve um erro, tente novamente. 😐");
+                return
             }
 
-            if (response.status !== 200) {
-                toast.error("Houve um erro. 😐");
-            }
+            setDisplayMessage('')
+            setIncomeAmount('')
+            setIncomeDate('')
+            setIncomeTypes([{
+                income_type: '',
+                id: ''
+            }])
+            getIncomeTypes()
+            toast.success("Receita lançada! 😎");
 
         } catch (error) {
             console.error(error)

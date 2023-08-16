@@ -63,7 +63,7 @@ const ShowExpenses = () => {
 
         try {
 
-            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/expenses/${userEmail}/${null}`, {
+            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/expenses/expenses-years/${userEmail}`, {
                 headers: {
                     Authorization: authToken,
                 }
@@ -81,9 +81,7 @@ const ShowExpenses = () => {
         getListOfExpenseYears()
     }, [])
 
-
-    useEffect(() => {
-
+    const transformListofExpenseYear = () => {
         if (!listOfExpenseYear) {
             return
         }
@@ -96,8 +94,10 @@ const ShowExpenses = () => {
         expenseYearArray.sort((a, b) => a.localeCompare(b));
 
         setExpenseYears(expenseYearArray)
+    }
 
-
+    useEffect(() => {
+        transformListofExpenseYear()
     }, [listOfExpenseYear])
 
     const getExpenseMonths = async (expenseYear: string) => {
@@ -106,7 +106,7 @@ const ShowExpenses = () => {
 
         try {
 
-            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/expenses-month/${expenseYear}/${userEmail}`, {
+            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/expenses/expenses-month/${expenseYear}/${userEmail}`, {
                 headers: {
                     Authorization: authToken,
                 }
@@ -123,7 +123,7 @@ const ShowExpenses = () => {
 
         try {
 
-            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/expenses-month/${expenseMonth}/${currentExpenseYear}/${userEmail}`, {
+            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/expenses/expenses-month/${expenseMonth}/${currentExpenseYear}/${userEmail}`, {
                 headers: {
                     Authorization: authToken,
                 }

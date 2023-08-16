@@ -76,7 +76,7 @@ const ModifyExpense = () => {
         const expenseQuantity = 10
         try {
 
-            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/expenses/${userEmail}/${expenseQuantity}`, {
+            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/expenses/entries/${userEmail}/${expenseQuantity}`, {
                 headers: {
                     Authorization: authToken,
                 }

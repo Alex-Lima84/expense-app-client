@@ -235,20 +235,23 @@ const ModifyIncome = () => {
     const deleteIncome = async () => {
 
         try {
-            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/income/${userEmail}/${id}`, {
+            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/incomes/income/${userEmail}/${id}`, {
                 method: 'DELETE',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `${authToken}`,
+                },
             })
-            if (response.status === 200) {
-                toast.success("Receita excluída! 😎");
-                setShowDeleteModal(false)
-                getIncomes()
-                setError('')
+
+            if (response.ok === false) {
+                toast.error("Houve um erro, tente novamente. 😐");
+                return
             }
 
-            if (response.status !== 200) {
-                toast.error("Houve um erro, tente novamente. 😐");
-            }
+            toast.success("Receita excluída! 😎");
+            setShowDeleteModal(false)
+            getIncomes()
+            setError('')
 
         } catch (error) {
             console.error(error)

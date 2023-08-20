@@ -38,6 +38,11 @@ const IncomeEntry = () => {
                 }
             })
             const data = await response.json()
+
+            if (data.error) {
+                return
+            }
+            
             setIncomeTypes(data)
 
         } catch (error) {

@@ -44,6 +44,11 @@ const ExpenseEntry = () => {
                 }
             })
             const data = await response.json()
+
+            if (data.error) {
+                return
+            }
+
             setExpenseCategories(data)
 
         } catch (error) {
@@ -61,6 +66,11 @@ const ExpenseEntry = () => {
                 }
             })
             const data = await response.json()
+
+            if (data.error) {
+                return
+            }
+            
             setExpenseTypes(data)
 
         } catch (error) {

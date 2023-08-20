@@ -21,6 +21,10 @@ const AdminHome = () => {
             })
             const data = await response.json()
 
+            if (data.error) {
+                return
+            }
+
             setUserName(data[0].first_name)
 
         } catch (error) {

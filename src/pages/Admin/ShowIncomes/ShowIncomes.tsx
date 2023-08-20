@@ -4,32 +4,32 @@ import AdminHeader from "../../../components/Admin/AdminHeader/AdminHeader";
 import AdminNavigationHeader from "../../../components/Admin/AdminNavigationHeader/AdminNavigationHeader";
 import './styles.scss'
 
-interface showExpensesInterface {
-    forEach(arg0: (expense: string[]) => void): unknown;
-    expense_type: string,
-    expense_amount: string,
-    expense_category: string,
-    expense_date: Date,
-    expense_year: string,
-    expense_month: string
-    id: string,
-    user_email: string,
-    created_at: string,
-    updated_at: string
-}
 interface IncomeInterface {
+    id?: string;
     income_type: string;
     income_amount: string;
+    income_date?: string;
+    income_year?: string;
+    income_month?: string;
+    user_email?: string;
+    created_at?: string; // You can use Date type if your language supports it
+    updated_at?: string;
+}
+
+interface IncomeYear {
+    income_year: string
+}
+interface IncomeMonth {
+    income_month: string
 }
 
 const ShowIncomes = () => {
     const [cookies, ,] = useCookies<any>(undefined)
-    const [listOfIncomeYear, setListOfIncomeYear] = useState<showExpensesInterface>()
-    const [incomeMonths, setIncomeMonths] = useState<any>([])
-    const [incomeYears, setIncomeYears] = useState<string[]>([])
+    const [incomeMonths, setIncomeMonths] = useState<IncomeMonth[]>([])
+    const [incomeYears, setIncomeYears] = useState<IncomeYear[]>([])
     const [currentIncomeYear, setCurrentIncomeYear] = useState<string>('')
-    const [incomesByMonth, setIncomesByMonth] = useState<any>()
-    const [formattedIncomes, setFormattedIncomes] = useState<any>()
+    const [incomesByMonth, setIncomesByMonth] = useState<IncomeInterface[]>()
+    const [formattedIncomes, setFormattedIncomes] = useState<IncomeInterface[]>()
     const [incomesSum, setIncomesSum] = useState<string[]>([])
     const [allIncomesSum, setAllIncomesSum] = useState<string>('')
     const [thirteenthSalaryIncomes, setThirteenthSalaryIncomes] = useState<string[]>([]);
@@ -61,14 +61,19 @@ const ShowIncomes = () => {
 
         try {
 
-            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/incomes/${userEmail}`, {
+            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/incomes/incomes-years/${userEmail}`, {
                 headers: {
                     Authorization: authToken,
                 }
             })
 
             const data = await response.json()
-            setListOfIncomeYear(data)
+
+            if (data.error) {
+                return
+            }
+
+            setIncomeYears(data)
 
         } catch (error) {
             console.error(error)
@@ -79,37 +84,23 @@ const ShowIncomes = () => {
         getListOfIncomesYears()
     }, [])
 
-
-    useEffect(() => {
-
-        if (!listOfIncomeYear) {
-            return
-        }
-
-        let incomeYearArray: string[] = []
-        listOfIncomeYear.forEach((expense: any) => {
-            incomeYearArray.push(expense.income_year)
-        });
-        incomeYearArray = Array.from(new Set(incomeYearArray));
-        incomeYearArray.sort((a, b) => a.localeCompare(b));
-
-        setIncomeYears(incomeYearArray)
-
-
-    }, [listOfIncomeYear])
-
     const getIncomeMonths = async (incomeYear: string) => {
         setCurrentIncomeYear(incomeYear)
         setIncomeMonths([])
 
         try {
 
-            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/incomes-month/${incomeYear}/${userEmail}`, {
+            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/incomes/incomes-month/${incomeYear}/${userEmail}`, {
                 headers: {
                     Authorization: authToken,
                 }
             })
             const data = await response.json()
+
+            if (data.error) {
+                return
+            }
+
             setIncomeMonths(data)
 
         } catch (error) {
@@ -121,12 +112,17 @@ const ShowIncomes = () => {
 
         try {
 
-            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/incomes-month/${incomeMonth}/${currentIncomeYear}/${userEmail}`, {
+            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/incomes/incomes-month/${incomeMonth}/${currentIncomeYear}/${userEmail}`, {
                 headers: {
                     Authorization: authToken,
                 }
             })
             const data = await response.json()
+
+            if (data.error) {
+                return
+            }
+
             setIncomesByMonth(data)
 
         } catch (error) {
@@ -226,12 +222,12 @@ const ShowIncomes = () => {
                                 onChange={(e: React.ChangeEvent<HTMLSelectElement>) => { getIncomeMonths(e.target.value) }}
                             >
                                 <option value="">Selecione...</option>
-                                {incomeYears ? incomeYears.map((option: any) => (
+                                {incomeYears ? incomeYears.map((option: any, id: number) => (
                                     <option
-                                        key={option}
-                                        value={option}
+                                        key={id}
+                                        value={option.income_year}
                                     >
-                                        {option}
+                                        {option.income_year}
                                     </option>
                                 )) : ''}
                             </select >

@@ -3,35 +3,38 @@ import { useCookies } from "react-cookie"
 import AdminHeader from "../../../components/Admin/AdminHeader/AdminHeader";
 import AdminNavigationHeader from "../../../components/Admin/AdminNavigationHeader/AdminNavigationHeader";
 import './styles.scss'
-
-interface showExpensesInterface {
-    forEach(arg0: (expense: string[]) => void): unknown;
-    expense_type: string,
-    expense_amount: string,
-    expense_category: string,
-    expense_date: Date,
-    expense_year: string,
-    expense_month: string
-    id: string,
-    user_email: string,
-    created_at: string,
-    updated_at: string
-}
-
 interface ExpenseInterface {
+    id?: string;
     expense_type: string;
     expense_category: string;
     expense_amount: string;
+    expense_date?: string;
+    expense_year?: string;
+    expense_month?: string;
+    user_email?: string;
+    created_at?: string; // You can use Date type if your language supports it
+    updated_at?: string;
+}
+
+interface FormattedExpenses {
+    expense_category: string;
+  expenses: ExpenseInterface[];
+}
+
+interface ExpenseYear {
+    income_year: string
+}
+interface ExpenseMonth {
+    income_month: string
 }
 
 const ShowExpenses = () => {
     const [cookies, ,] = useCookies<any>(undefined)
-    const [listOfExpenseYear, setListOfExpenseYear] = useState<showExpensesInterface>()
-    const [expenseMonths, setExpenseMonths] = useState<any>([])
-    const [expenseYears, setExpenseYears] = useState<string[]>([])
+    const [expenseMonths, setExpenseMonths] = useState<ExpenseMonth[]>([])
+    const [expenseYears, setExpenseYears] = useState<ExpenseYear[]>([])
     const [currentExpenseYear, setCurrentExpenseYear] = useState<string>('')
-    const [expensesByMonth, setExpensesByMonth] = useState<any>()
-    const [formattedExpenses, setFormattedExpenses] = useState<any>()
+    const [expensesByMonth, setExpensesByMonth] = useState<ExpenseInterface[]>()
+    const [formattedExpenses, setFormattedExpenses] = useState<FormattedExpenses[]>()
     const [expensesSum, setExpensesSum] = useState<string[]>([])
     const [allExpensesSum, setAllExpensesSum] = useState<string>('')
     const [homeExpenses, setHomeExpenses] = useState<ExpenseInterface[]>([]);
@@ -59,6 +62,8 @@ const ShowExpenses = () => {
         setAllExpensesSum('')
     }
 
+    console.log(formattedExpenses)
+
     const getListOfExpenseYears = async () => {
 
         try {
@@ -70,7 +75,11 @@ const ShowExpenses = () => {
             })
 
             const data = await response.json()
-            setListOfExpenseYear(data)
+
+            if (data.error) {
+                return
+            }
+            setExpenseYears(data)
 
         } catch (error) {
             console.error(error)
@@ -80,25 +89,6 @@ const ShowExpenses = () => {
     useEffect(() => {
         getListOfExpenseYears()
     }, [])
-
-    const transformListofExpenseYear = () => {
-        if (!listOfExpenseYear) {
-            return
-        }
-
-        let expenseYearArray: string[] = []
-        listOfExpenseYear.forEach((expense: any) => {
-            expenseYearArray.push(expense.expense_year)
-        });
-        expenseYearArray = Array.from(new Set(expenseYearArray));
-        expenseYearArray.sort((a, b) => a.localeCompare(b));
-
-        setExpenseYears(expenseYearArray)
-    }
-
-    useEffect(() => {
-        transformListofExpenseYear()
-    }, [listOfExpenseYear])
 
     const getExpenseMonths = async (expenseYear: string) => {
         setCurrentExpenseYear(expenseYear)
@@ -112,6 +102,11 @@ const ShowExpenses = () => {
                 }
             })
             const data = await response.json()
+
+            if (data.error) {
+                return
+            }
+
             setExpenseMonths(data)
 
         } catch (error) {
@@ -129,6 +124,11 @@ const ShowExpenses = () => {
                 }
             })
             const data = await response.json()
+
+            if (data.error) {
+                return
+            }
+
             setExpensesByMonth(data)
 
         } catch (error) {
@@ -220,7 +220,7 @@ const ShowExpenses = () => {
                     setLeisureExpenses(expenses || []);
                     break;
                 case "Educação":
-                    setDependentsExpenses(expenses || []);
+                    setEducationExpenses(expenses || []);
                     break;
                 case "Dependentes":
                     setDependentsExpenses(expenses || []);
@@ -250,12 +250,12 @@ const ShowExpenses = () => {
                                 onChange={(e: React.ChangeEvent<HTMLSelectElement>) => { getExpenseMonths(e.target.value) }}
                             >
                                 <option value="">Selecione...</option>
-                                {expenseYears ? expenseYears.map((option: any) => (
+                                {expenseYears ? expenseYears.map((option: any, id: number) => (
                                     <option
-                                        key={option}
-                                        value={option}
+                                        key={id}
+                                        value={option.expense_year}
                                     >
-                                        {option}
+                                        {option.expense_year}
                                     </option>
                                 )) : ''}
                             </select >

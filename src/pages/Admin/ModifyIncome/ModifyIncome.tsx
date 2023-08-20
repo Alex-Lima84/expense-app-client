@@ -78,6 +78,11 @@ const ModifyIncome = () => {
             })
 
             const data = await response.json()
+
+            if (data.error) {
+                return
+            }
+
             setShowIncomes(data)
 
         } catch (error) {
@@ -98,6 +103,10 @@ const ModifyIncome = () => {
                 }
             })
             const data = await response.json()
+
+            if (data.error) {
+                return
+            }
 
             getincomeTypes()
             setincomeData(data)
@@ -144,6 +153,11 @@ const ModifyIncome = () => {
                 }
             })
             const data = await response.json()
+
+            if (data.error) {
+                return
+            }
+            
             setIncomeTypes(data)
 
         } catch (error) {

@@ -83,6 +83,11 @@ const ModifyExpense = () => {
             })
 
             const data = await response.json()
+
+            if (data.error) {
+                return
+            }
+
             setShowExpenses(data)
 
         } catch (error) {
@@ -104,6 +109,11 @@ const ModifyExpense = () => {
                 }
             })
             const data = await response.json()
+
+            if (data.error) {
+                return
+            }
+            
             setExpenseData(data)
             setId(expenseId)
             setExpenseAmount(data[0].expense_amount)
@@ -147,6 +157,11 @@ const ModifyExpense = () => {
                 }
             })
             const data = await response.json()
+
+            if (data.error) {
+                return
+            }
+
             setExpenseCategories(data)
 
         } catch (error) {
@@ -164,6 +179,11 @@ const ModifyExpense = () => {
                 }
             })
             const data = await response.json()
+
+            if (data.error) {
+                return
+            }
+            
             setExpenseTypes(data)
 
         } catch (error) {

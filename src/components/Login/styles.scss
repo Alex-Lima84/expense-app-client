@@ -39,9 +39,12 @@
                 color: #ffffff;
             }
 
-            .error-message {
-                text-align: center;
-                color: #ff2525;
+            .error-container {
+
+                .error-message {
+                    text-align: center;
+                    color: #ff2525;
+                }
             }
         }
 

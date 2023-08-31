@@ -10,19 +10,24 @@ const Signin = () => {
     const [lastName, setLastName] = useState<string>('')
     const [password, setPassword] = useState<string>('')
     const [confirmPassword, setConfirmPassword] = useState<string>('')
-    const [error, setError] = useState<string>('')
+    const [errors, setErrors] = useState<string[]>([])
     const navigate = useNavigate();
 
     const handleSubmit = async (e: React.FormEvent<HTMLInputElement>) => {
         e.preventDefault()
 
         if (!email || !firstName || !lastName || !password || !confirmPassword) {
-            setError('Please fill all the required info')
+            setErrors(['Please fill all the required info'])
+            return
+        }
+
+        if (password.length < 8) {
+            setErrors(['Password must be at least 8 characters long'])
             return
         }
 
         if (password !== confirmPassword) {
-            setError('Passwords are not equal')
+            setErrors(['Passwords are not equal'])
             return
         }
 
@@ -34,12 +39,17 @@ const Signin = () => {
 
         const data = await response.json()
 
+        if (data.error) {
+            setErrors(data.message)
+            return
+        }
+
         if (data.detail) {
             if (data.detail.includes('already exists.')) {
-                setError("This email is already taken")
+                setErrors(["This email is already taken"])
                 return
             } else {
-                setError(data.detail)
+                setErrors(data.detail)
                 return
             }
         }
@@ -82,7 +92,13 @@ const Signin = () => {
                         className='create'
                         onClick={(e) => handleSubmit(e)}
                     />
-                    {error && <p className='error-message'>{error}</p>}
+                    {errors.length > 0 && (
+                        <div className='error-container'>
+                            {errors.map((error: string, index: number) => (
+                                <p key={index} className='error-message'>{error}</p>
+                            ))}
+                        </div>
+                    )}
                 </form>
                 <div className='auth-options'>
                     <Link to='/login'>Log in</Link>

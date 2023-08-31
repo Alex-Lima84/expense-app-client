@@ -8,19 +8,17 @@ import './styles.scss'
 
 const Login = () => {
     const [cookies, setCookie,] = useCookies<string>(undefined)
-    const [email, setEmail] = useState<string>('alexandre.cerutti@live.com')
-    const [password, setPassword] = useState<string>('123')
-    const [error, setError] = useState<string>('')
+    const [email, setEmail] = useState<string>('')
+    const [password, setPassword] = useState<string>('')
+    const [errors, setErrors] = useState<string[]>([])
     const navigate = useNavigate();
     const dispatch = useDispatch()
-
-
 
     const handleSubmit = async (e: React.FormEvent<HTMLInputElement>) => {
         e.preventDefault()
 
         if (!email || !password) {
-            setError('Please fill all the required info')
+            setErrors(['Please fill all the required info'])
             return
         }
 
@@ -32,8 +30,13 @@ const Login = () => {
 
         const data = await response.json()
 
+        if (data.error) {
+            setErrors(data.message)
+            return
+        }
+
         if (data.detail) {
-            setError(data.detail)
+            setErrors(data.detail)
             return
         }
 
@@ -65,7 +68,13 @@ const Login = () => {
                         className='create'
                         onClick={(e) => handleSubmit(e)}
                     />
-                    {error && <p className='error-message'>{error}</p>}
+                    {errors.length > 0 && (
+                        <div className='error-container'>
+                            {errors.map((error: string, index: number) => (
+                                <p key={index} className='error-message'>{error}</p>
+                            ))}
+                        </div>
+                    )}
                 </form>
                 <div className='auth-options'>
                     <Link to='/signin'>Sign in</Link>
@@ -78,3 +87,11 @@ const Login = () => {
 }
 
 export default Login;
+
+// {errors.length > 0 && (
+//     <div>
+//         {errors.map((error, index) => (
+//             <p key={index} className='error-message'>{error}</p>
+//         ))}
+//     </div>
+// )}

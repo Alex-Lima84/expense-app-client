@@ -22,6 +22,24 @@
                 background-color: transparent;
             }
 
+            .requirements-list {
+                margin: 0;
+
+                .requirements-list-item::before {
+                    content: "* ";
+                    color: red;
+                    font-weight: bold;
+                    margin-right: 2px;
+                }
+
+                .requirements-list-item {
+                    color: #ff2525;
+                    font-size: 12px;
+                    margin: 2px;
+                    list-style: none;
+                }
+            }
+
             .create {
                 border: 1.5px solid #6c7394;
                 color: #6c7394;

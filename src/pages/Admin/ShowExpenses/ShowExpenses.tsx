@@ -60,9 +60,7 @@ const ShowExpenses = () => {
         setDependentsExpenses([]);
         setExpensesSum([])
         setAllExpensesSum('')
-    }
-
-    console.log(formattedExpenses)
+    }  
 
     const getListOfExpenseYears = async () => {
 

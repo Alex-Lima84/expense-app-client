@@ -8,8 +8,8 @@ import './styles.scss'
 
 const Login = () => {
     const [cookies, setCookie,] = useCookies<string>(undefined)
-    const [email, setEmail] = useState<string>('')
-    const [password, setPassword] = useState<string>('')
+    const [email, setEmail] = useState<string>('daniel.alves@gmail.com')
+    const [password, setPassword] = useState<string>('Danialves!')
     const [errors, setErrors] = useState<string[]>([])
     const navigate = useNavigate();
     const dispatch = useDispatch()

@@ -19,13 +19,13 @@ const AdminHome = () => {
                     Authorization: authToken,
                 }
             })
-            const data = await response.json()           
-
+            const data = await response.json() 
+                      
             if (data.error) {
                 return
             }
 
-            setUserName(data[0].first_name)
+            setUserName(data.first_name)
 
         } catch (error) {
             console.error(error)

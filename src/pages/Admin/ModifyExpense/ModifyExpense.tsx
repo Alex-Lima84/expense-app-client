@@ -31,7 +31,7 @@ interface expenseInterface {
     updated_at: string
 }
 
-type expenseType = expenseInterface[]
+
 
 interface expenseCategoryType {
     expense_category: string,
@@ -44,7 +44,7 @@ interface expenseTypesInterface {
 }
 
 const ModifyExpense = () => {
-    const [expenseData, setExpenseData] = useState<expenseType>([{
+    const [expenseData, setExpenseData] = useState<expenseInterface>({
         expense_type: '',
         expense_amount: '',
         expense_category: '',
@@ -53,7 +53,7 @@ const ModifyExpense = () => {
         expense_month: '',
         id: '',
         updated_at: ''
-    }])
+    })
     const [cookies, ,] = useCookies<any>(undefined)
     const [showExpenses, setShowExpenses] = useState<showExpensesInterface>()
     const [showModal, setShowModal] = useState<boolean>(false)
@@ -109,6 +109,7 @@ const ModifyExpense = () => {
                 }
             })
             const data = await response.json()
+            console.log(data)
 
             if (data.error) {
                 return
@@ -116,10 +117,10 @@ const ModifyExpense = () => {
             
             setExpenseData(data)
             setId(expenseId)
-            setExpenseAmount(data[0].expense_amount)
-            const dateYear = data[0].expense_date.substring(0, 4)
-            const dateMonth = data[0].expense_date.substring(5, 7)
-            const dateDay = data[0].expense_date.substring(8, 10)
+            setExpenseAmount(data.expense_amount)
+            const dateYear = data.expense_date.substring(0, 4)
+            const dateMonth = data.expense_date.substring(5, 7)
+            const dateDay = data.expense_date.substring(8, 10)
             const expenseDate = `${dateYear}-${dateMonth}-${dateDay}`
             setExpenseDate(expenseDate)
             setExpenseMonth(dateMonth)
@@ -240,16 +241,16 @@ const ModifyExpense = () => {
     const updateExpense = async (e: any) => {
         e.preventDefault()
         const formattedAmount = expenseAmount.replace(',', '.').replace(moneyRegex, '$&.')
-        const expenseDataDate = expenseData[0].expense_date.slice(0, 10)
+        const expenseDataDate = expenseData.expense_date.slice(0, 10)
 
         if (expenseTypeName === '' || formattedAmount === '' || expenseCategoryName === '' || expenseDate === '') {
             setError('Por favor, preencha todas as informações.')
             return
         }
 
-        if (expenseTypeName === expenseData[0].expense_type &&
-            expenseAmount === expenseData[0].expense_amount &&
-            expenseCategoryName === expenseData[0].expense_category &&
+        if (expenseTypeName === expenseData.expense_type &&
+            expenseAmount === expenseData.expense_amount &&
+            expenseCategoryName === expenseData.expense_category &&
             expenseDate === expenseDataDate) {
             setError('Não houve modificação em pelo menos um campo.')
             return
@@ -393,7 +394,7 @@ const ModifyExpense = () => {
                             <form className='expense-form'>
                                 <h2>Preencha os dados abaixo para modificar a despesa</h2>
                                 <div className='choice-container'>
-                                    <h3>Categoria atual: <strong>{expenseData[0].expense_category}</strong></h3>
+                                    <h3>Categoria atual: <strong>{expenseData.expense_category}</strong></h3>
                                     <label>Escolha a categoria da despesa:</label>
                                     <select
                                         onChange={(e: React.ChangeEvent<HTMLSelectElement>) => { getExpenseTypes(e.target.value) }}
@@ -410,7 +411,7 @@ const ModifyExpense = () => {
                                     </select >
                                 </div>
                                 <div className='choice-container'>
-                                    <h3>Tipo de despesa atual: <strong>{expenseData[0].expense_type}</strong></h3>
+                                    <h3>Tipo de despesa atual: <strong>{expenseData.expense_type}</strong></h3>
                                     <label>Escolha o tipo de despesa:</label>
                                     <select
                                         onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setExpenseTypeName(e.target.value)}
@@ -470,8 +471,8 @@ const ModifyExpense = () => {
                             </button>
                         </div>
                         <h2>Você deseja excluir esta despesa?</h2>
-                        <p>Despesa: <strong>{expenseData[0].expense_type}</strong></p>
-                        <p>Valor: <strong>R${' '}{expenseData[0].expense_amount.replace('.', ',')
+                        <p>Despesa: <strong>{expenseData.expense_type}</strong></p>
+                        <p>Valor: <strong>R${' '}{expenseData.expense_amount.replace('.', ',')
                             .replace(moneyRegex, '$&.')}</strong></p>
                         <div className='delete-button-container'>
                             <button onClick={deleteExpense}>Sim</button>
